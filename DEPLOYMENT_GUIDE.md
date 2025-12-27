@@ -68,11 +68,11 @@ Jika ingin dashboard database yang lebih lengkap terpisah dari Vercel.
 ---
 
 ## 🔄 Langkah 3: Push Database Structure
-Agar database Supabase punya tabel yang sama dengan lokal, kita harus melakukan "Push" dari komputer lokal ke Supabase.
+Agar database online (Supabase/Vercel Postgres) punya tabel yang sama dengan lokal, kita harus melakukan "Push" dari komputer lokal ke database online.
 
 1.  Buka Terminal di VS Code (Project Towing).
-2.  Ganti isi file `.env` **SEMENTARA** dengan URL Supabase (Database URL yang baru).
-    *   *Tips*: Anda bisa buat file baru `.env.production` untuk menyimpan ini.
+2.  Ganti isi file `.env` **SEMENTARA** dengan URL Database Online (Supabase URI atau Vercel `POSTGRES_PRISMA_URL`).
+    *   *Tips*: Anda bisa buat file baru `.env.production` untuk menyimpan ini agar tidak tertukar.
 3.  Jalankan perintah ini untuk upload struktur tabel:
     ```bash
     npx prisma db push
@@ -83,7 +83,7 @@ Agar database Supabase punya tabel yang sama dengan lokal, kita harus melakukan 
     npx prisma db seed
     ```
     *(Tunggu sampai sukses)*
-5.  Kembalikan isi file `.env` lokal ke database lokal (jika ingin coding di lokal lagi).
+5.  **PENTING**: Kembalikan isi file `.env` lokal ke database lokal (jika ingin coding di lokal lagi).
 
 ---
 
