@@ -48,7 +48,6 @@ export async function POST(req: Request) {
                 vehicleType: validatedData.vehicleType,
                 notes: validatedData.notes,
                 paymentMethod: validatedData.paymentMethod,
-                paymentMethod: validatedData.paymentMethod,
                 totalAmount: 0, // Placeholder, will set below
                 status: "PENDING",
                 serviceId: service.id,
