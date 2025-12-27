@@ -41,8 +41,8 @@ export default function LoginPage() {
             if (result?.error) {
                 setError("Invalid email or password");
             } else {
-                router.push("/dashboard");
-                router.refresh();
+                // Force hard redirect to ensure cookies/session are recognized by Middleware
+                window.location.href = "/dashboard";
             }
         } catch (error) {
             setError("An unexpected error occurred");
