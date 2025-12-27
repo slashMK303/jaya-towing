@@ -32,7 +32,9 @@ export default async function EditServicePage({ params }: EditServicePageProps) 
         createdAt: service.createdAt,
         updatedAt: service.updatedAt,
         price: Number(service.price),
-        pricePerKm: (service as any).pricePerKm ? Number((service as any).pricePerKm) : 0
+        pricePerKm: (service as any).pricePerKm ? Number((service as any).pricePerKm) : 0,
+        type: (service as any).type,
+        fleetType: (service as any).fleetType,
     };
 
     return (
