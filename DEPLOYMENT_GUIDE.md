@@ -19,10 +19,11 @@ Vercel memiliki database sendiri (powered by Neon) yang bisa dibuat dalam 1 klik
 
 1.  Buka Project Anda di [Vercel](https://vercel.com).
 2.  Masuk ke tab **Storage**.
-3.  Klik **Connect Store** -> **Create New** -> Pilih **Postgres**.
-4.  Beri nama (misal: `vin-towing-db`) dan Region (Singapore `sin1`).
-5.  Klik **Create**.
-6.  Setelah jadi, Vercel akan otomatis menambahkan Environment Variable (`POSTGRES_URL`, dll) ke project Anda.
+3.  Klik **Connect Store**.
+    *   Jika belum ada: Klik **Create New** -> Pilih **Postgres**.
+    *   **Jika sudah ada** (seperti di gambar "Prisma Postgres"): Klik tombol **Connect Project** di sebelah nama database.
+4.  Pilih Project `vin-towing` dan klik **Connect**.
+5.  Setelah terhubung, Vercel akan otomatis menambahkan Environment Variable ke project.
 7.  **Penting**: Masuk ke **Settings** -> **Environment Variables**.
     *   Cari variable bernama `POSTGRES_PRISMA_URL`.
     *   Copy nilainya.
