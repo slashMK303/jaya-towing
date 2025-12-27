@@ -1,53 +1,93 @@
-# Vin Towing App - Next.js Migration Guide
+# 🚜 Vin Towing App - Next.js Full Stack Solution
 
-Project ini adalah konversi dari website React lama menjadi aplikasi Full-Stack Next.js 14+ dengan fitur Booking Online dan Dashboard Admin.
+![Project Banner](public/hero-towing.jpg)
 
-## 📋 Prasyarat
-Pastikan di komputer Anda sudah terinstall:
-- [Node.js](https://nodejs.org/) (v18 ke atas)
-- [PostgreSQL](https://www.postgresql.org/) (Database)
+**Vin Towing** adalah aplikasi web modern untuk layanan jasa derek (towing) dan bantuan darurat jalan raya. Dibangun menggunakan **Next.js 14**, project ini mengubah sistem website lama menjadi platform aplikasi web progresif (PWA) yang cepat, aman, dan mudah dikelola.
 
-## 🚀 Instalasi & Setup (Menjalankan Ulang)
+Wibsite ini memiliki dua sisi utama:
+1.  **Frontend Pelanggan**: Untuk booking layanan, cek harga, dan tracking driver.
+2.  **Admin Dashboard**: "Command Center" untuk mengelola pesanan, layanan, testimoni, dan pengaturan website.
 
-Jika Anda memindahkan folder project ini ke `C:\VINNNN\towing-nextjs`, ikuti langkah berikut untuk menyalakannya kembali:
+---
 
-### 1. Masuk ke Folder Project
-Buka terminal dan arahkan ke lokasi baru:
+## ✨ Fitur Unggulan
+
+### 🌍 Untuk Pelanggan (Frontend)
+-   **Booking Cerdas**: Formulir pemesanan yang menyesuaikan input berdasarkan tipe layanan (Transport vs Jumper Aki).
+-   **Estimasi Harga Real-time**: Kalkulasi harga otomatis `(Jarak x Harga per KM) + Harga Dasar` menggunakan OSRM Routing.
+-   **Live Tracking**: Lacak posisi driver secara *real-time* di peta saat menuju lokasi Anda.
+-   **WhatsApp Integration**: Terhubung langsung ke WhatsApp Admin dengan pesan otomatis berisi detail order.
+-   **Responsive Design**: Tampilan *mobile-first* yang ringan dan elegan (Tema: Dark Industrial).
+
+### 🛡️ Untuk Admin (Dashboard)
+-   **Command Center UI**: Dashboard interaktif dengan grafik pendapatan dan statistik pesanan.
+-   **Manajemen Pesanan (OMS)**:
+    -   Lihat semua order masuk (Pending, Confirmed, Completed).
+    -   Update status order dengan satu klik.
+    -   **Driver Assignment**: Tentukan lokasi driver untuk dilihat customer.
+-   **Manajemen Konten (CMS)**:
+    -   **Layanan**: Tambah/Edit layanan, harga, dan gambar.
+    -   **Testimoni**: Moderasi ulasan pelanggan (tampil/sembunyikan).
+    -   **Settings**: Ganti No HP, Judul Web, dan Link Sosmed tanpa koding.
+-   **Laporan & Export**: Download data pesanan dalam format Excel (.xls) yang rapi.
+
+---
+
+## 🛠️ Teknologi & Stack
+
+Project ini dibangun dengan teknologi web modern untuk performa dan skalabilitas maksimal:
+
+-   **Core**: [Next.js 14](https://nextjs.org/) (App Router & Server Actions)
+-   **Language**: [TypeScript](https://www.typescriptlang.org/)
+-   **Database**: [PostgreSQL](https://www.postgresql.org/) (via [Prisma ORM](https://www.prisma.io/))
+-   **Map & Routing**: [Leaflet](https://leafletjs.com/) + [OSRM](http://project-osrm.org/) (Open Source Routing Machine)
+-   **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+-   **Auth**: [NextAuth.js](https://next-auth.js.org/)
+-   **Icons**: [Lucide React](https://lucide.dev/)
+-   **Payment Gateway**: [Midtrans Snap](https://midtrans.com/) (Integration Ready)
+
+---
+
+## 🚀 Instalasi & Menjalankan Lokal
+
+Ikuti langkah ini untuk menjalankan project di komputer Anda:
+
+### 1. Prasyarat
+Pastikan Anda sudah menginstall:
+-   [Node.js v18+](https://nodejs.org/)
+-   [PostgreSQL](https://www.postgresql.org/download/)
+
+### 2. Clone & Install
 ```bash
-cd C:\VINNNN\towing-nextjs
-```
-
-### 2. Install Dependency
-```bash
+git clone https://github.com/username/vin-towing-app.git
+cd vin-towing-app
 npm install
 ```
 
-### 3. Setup Environment Variables (.env)
-Pastikan file `.env` ada di root folder dan berisi konfigurasi berikut:
+### 3. Konfigurasi Environment Variable
+Buat file `.env` di root folder dan isi konfigurasi berikut:
 
 ```env
-# Database (Sesuaikan dengan kredensial Postgres Anda)
+# Database (Ganti dengan password database lokal Anda)
 DATABASE_URL="postgresql://postgres:password@localhost:5432/vin_towing_db?schema=public"
 
-# NextAuth (Keamanan Login)
+# NextAuth (Keamanan)
 NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="vin_towing_secure_secret_2025" # Ganti dengan string acak yang aman
+NEXTAUTH_SECRET="rahasia_super_aman_123" 
 
-# Midtrans Payment (Contoh Sandbox)
-MIDTRANS_SERVER_KEY="SB-Mid-server-xxxx"
-MIDTRANS_CLIENT_KEY="SB-Mid-client-xxxx"
+# Payment Gateway (Midtrans Sandbox)
+MIDTRANS_SERVER_KEY="SB-Mid-server-xxxxxxxxx"
+MIDTRANS_CLIENT_KEY="SB-Mid-client-xxxxxxxxx"
 MIDTRANS_IS_PRODUCTION="false"
-NEXT_PUBLIC_MIDTRANS_CLIENT_KEY="SB-Mid-client-xxxx"
+NEXT_PUBLIC_MIDTRANS_CLIENT_KEY="SB-Mid-client-xxxxxxxxx"
 ```
 
 ### 4. Setup Database
-Jalankan perintah ini untuk membuat tabel:
+Jalankan perintah ini untuk membuat tabel dan mengisi data awal (seeding):
 ```bash
 npx prisma db push
-```
-Dan jalankan ini untuk mengisi data awal (Akun Admin & Layanan Dummy):
-```bash
 npx prisma db seed
+node prisma/seed-testimonials.js
 ```
 
 ### 5. Jalankan Server
@@ -58,66 +98,64 @@ Buka browser di [http://localhost:3000](http://localhost:3000).
 
 ---
 
-## 🔑 Akun Admin
+## 🔑 Akun Admin Default
 
-Untuk masuk ke Dashboard Admin, buka [http://localhost:3000/auth/login](http://localhost:3000/auth/login) atau klik menu "Dashboard" di navbar.
-
-- **Email**: `admin@towing.com`
-- **Password**: `admin123`
-
----
-
-## ✨ Fitur Utama
-
-### 1. Halaman Public (Pelanggan)
-- **Landing Page**: Menampilkan layanan yang aktif.
-- **SEO Friendly URLs**: URL layanan menggunakan nama (slug), bukan ID acak.
-- **Booking Online**: Form pemesanan dengan validasi.
-- **Pembayaran (Midtrans)**:
-  - Pilih metode "Transfer / E-Wallet".
-  - Popup pembayaran akan muncul otomatis.
-  - Status pesanan akan update otomatis jika pembayaran sukses.
-
-### 2. Admin Dashboard
-- **Dashboard Overview**: Ringkasan Pendapatan, Total Pesanan, dan Pesanan Terbaru.
-- **Manajemen Pesanan**:
-  - Melihat daftar semua pesanan masuk.
-  - Update status pesanan (Pending -> Confirmed -> Completed).
-  - **Export Data**: Unduh laporan booking ke Excel (.xls).
-- **Manajemen Layanan (CRUD)**:
-  - **Tambah**: Mendukung Tipe Layanan (Transport/On-Site) dan Jenis Armada.
-  - **Upload Gambar**: Integrasi Upload File Lokal & URL Eksternal.
-- **Manajemen Konten (CMS)**:
-  - **Testimoni**: Tambah/Hapus ulasan pelanggan untuk halaman depan.
-  - **Pengaturan**: Ganti Judul Website, No HP, Sosial Media, dan Gambar Hero tanpa coding.
-- **Tracking & Maps**:
-  - **Update Lokasi Driver**: Set lokasi driver di peta untuk dilihat customer.
-  - **Rute Otomatis**: Visualisasi rute penjemputan dan pengantaran (OSRM).
-
-### 3. Fitur Canggih
-- **Tracking Real-time**: Halaman khusus untuk customer melacak posisi driver.
-- **Estimasi Harga Dinamis**: Hitung harga otomatis berdasarkan jarak (Google/OSRM) + Harga Dasar.
-- **WhatsApp Integration**: Tombol chat otomatis dengan template pesan (Order ID + Lokasi).
+Gunakan akun ini untuk masuk ke Dashboard:
+-   **URL**: `/auth/login`
+-   **Email**: `admin@towing.com`
+-   **Password**: `admin123`
 
 ---
 
-## 🛠️ Catatan Teknis untuk Developer
+## 📂 Struktur Project
 
-- **Framework**: Next.js 14 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Database**: Prisma ORM + PostgreSQL
-- **Auth**: NextAuth.js (Credentials Provider)
-- **Form**: React Hook Form + Zod Validation
-- **Payment**: Midtrans Snap API
-
-### Struktur Folder Penting
-- `src/app`: Halaman-halaman website (File-system routing).
-- `src/components`: Komponen UI reusable (Navbar, Form, Card).
-- `src/lib`: Konfigurasi utility (Prisma, Auth, Midtrans).
-- `src/app/actions`: Server Actions untuk logika backend (CRUD).
-- `prisma/schema.prisma`: Definisi struktur database.
+```
+src/
+├── app/                  # App Router Pages
+│   ├── (public)/         # Halaman Public (Home, Track)
+│   ├── auth/             # Halaman Login
+│   ├── dashboard/        # Halaman Admin (Protected)
+│   └── api/              # API Routes (Webhook, Export)
+├── components/           # UI Components
+│   ├── ui/               # Reusable atomic (Button, Card)
+│   └── (features)/       # Feature components (BookingForm, Map)
+├── lib/                  # Utilities (Prisma, Auth config)
+└── actions/              # Server Actions (Backend Logic)
+prisma/                   # Database Schema & Seeds
+public/                   # Static Assets (Images, Icons)
+```
 
 ---
-**Penting saat memindahkan Folder:**
-Saat folder dipindah, pastikan folder `node_modules` dan `.next` tidak korup. Jika terjadi error aneh saat `npm run dev`, coba hapus folder `.next` dan jalankan ulang server.
+
+## 🌐 Panduan Deployment
+
+Aplikasi ini siap di-deploy ke **Vercel** (Rekomendasi) atau VPS.
+
+### Deploy ke Vercel (Gratis & Mudah)
+1.  Push kode ke GitHub.
+2.  Buka [Vercel](https://vercel.com) -> New Project -> Import Repository.
+3.  Di bagian **Environment Variables**, masukkan semua isi file `.env`.
+4.  Klik **Deploy**.
+
+**Catatan Database**: Untuk database online, Anda bisa menggunakan [Supabase](https://supabase.com/) atau [Neon](https://neon.tech/) (Free PostgreSQL Tier) dan masukkan URL koneksinya ke `.env` di Vercel.
+
+---
+
+## 📝 Roadmap Pengembangan
+- [x] Booking System & Dynamic Pricing
+- [x] Admin Dashboard & CMS
+- [x] Tracking & Routing System
+- [x] Testimonials Management
+- [ ] **Mobile App for Drivers** (React Native)
+- [ ] **Email Notifications** (Resend/Nodemailer)
+- [ ] **Payment Gateway Production Mode**
+
+---
+
+## 🤝 Kontribusi
+
+Pull Request sangat diterima! Untuk perubahan besar, mohon buka Issue terlebih dahulu untuk diskusi.
+
+## 📄 Lisensi
+
+[MIT](LICENSE) © 2025 Vin Towing App.
