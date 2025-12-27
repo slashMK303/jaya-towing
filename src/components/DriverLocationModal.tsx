@@ -153,11 +153,11 @@ export default function DriverLocationModal({
                     <MapContainer
                         center={center}
                         zoom={13}
-                        style={{ height: "100%", width: "100%", position: "absolute", background: "#18181b" }}
+                        style={{ height: "100%", width: "100%", position: "absolute", background: "#f4f4f5" }}
                     >
                         <TileLayer
                             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
                         <MapEvents onLocationSelect={(lat, lng) => setPosition(L.latLng(lat, lng))} />
 
