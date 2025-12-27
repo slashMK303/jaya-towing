@@ -1,0 +1,109 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// User & Authentication
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  password      String
+  role          Role      @default(ADMIN)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  bookings      Booking[]
+}
+
+enum Role {
+  ADMIN
+  OWNER
+}
+
+// Services/Layanan Towing
+model Service {
+  id          String    @id @default(cuid())
+  title       String
+  slug        String    @unique
+  description String
+  price       Decimal // Base Price / Hook-up Fee
+  pricePerKm  Decimal @default(0) // New field: Biaya per KM
+  image       String?
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  bookings    Booking[]
+}
+
+// Booking/Transaksi
+model Booking {
+  id              String        @id @default(cuid())
+  customerName    String
+  customerPhone   String
+  customerEmail   String?
+  pickupLocation  String
+  dropLocation    String
+  vehicleType     String
+  serviceId       String
+  service         Service       @relation(fields: [serviceId], references: [id])
+  paymentMethod   PaymentMethod
+  paymentStatus   PaymentStatus @default(PENDING)
+  totalAmount     Decimal
+  midtransToken   String?
+  midtransOrderId String?       @unique
+  notes           String?
+  status          BookingStatus @default(PENDING)
+  trackingCode    String?       @unique
+  pickupLat       Float?
+  pickupLng       Float?
+  dropLocationLat Float?
+  dropLocationLng Float?
+  driverLat       Float?
+  driverLng       Float?
+  userId          String?
+  user            User?         @relation(fields: [userId], references: [id])
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+enum PaymentMethod {
+  ONLINE    // Menggunakan Midtrans
+  COD       // Cash on Delivery
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  EXPIRED
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+// Content Management (untuk konten dinamis)
+model Content {
+  id        String   @id @default(cuid())
+  key       String   @unique // e.g., "hero_title", "about_text"
+  value     String   @db.Text
+  type      String   // text, image, html
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Settings
+model Setting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
