@@ -25,6 +25,8 @@ Vercel memiliki database sendiri (powered by Neon) yang bisa dibuat dalam 1 klik
 4.  Pilih Project `vin-towing`.
 5.  **Custom Prefix**: Biarkan kosong (default) atau isi `POSTGRES`.
 6.  Klik **Connect**.
+    *   ⚠️ **Jika Error "Already exists"**: Itu berarti sudah ada variable `DATABASE_URL` lama (bawaan dari import awal).
+    *   **Solusi**: Buka tab **Settings** -> **Environment Variables**, cari `DATABASE_URL` -> **Hapus** (Delete). Lalu ulangi langkah Connect ini.
 5.  Setelah terhubung, Vercel akan otomatis menambahkan Environment Variable ke project.
 7.  **Penting**: Masuk ke **Settings** -> **Environment Variables**.
     *   Cari variable bernama `POSTGRES_PRISMA_URL`.
