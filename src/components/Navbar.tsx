@@ -33,11 +33,11 @@ export default function Navbar({ settings = {} }: NavbarProps) {
     const logoUrl = settings.logo_url;
 
     return (
-        <nav className="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50 transition-colors duration-300">
+        <nav className="bg-zinc-950/80 backdrop-blur-md border-b border-zinc-800 sticky top-0 z-50 transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
                     <div
-                        className="text-xl font-bold cursor-pointer text-white flex items-center gap-2"
+                        className="text-xl font-black tracking-tight cursor-pointer text-white flex items-center gap-2"
                         onClick={() => handleNavigation("hero")}
                     >
                         {logoUrl ? (
@@ -55,25 +55,25 @@ export default function Navbar({ settings = {} }: NavbarProps) {
                     <div className="hidden md:flex space-x-8">
                         <button
                             onClick={() => handleNavigation("hero")}
-                            className="text-slate-300 hover:text-cyan-400 font-medium transition-colors"
+                            className="text-zinc-400 hover:text-orange-500 font-medium transition-colors"
                         >
                             Beranda
                         </button>
                         <button
                             onClick={() => handleNavigation("services")}
-                            className="text-slate-300 hover:text-cyan-400 font-medium transition-colors"
+                            className="text-zinc-400 hover:text-orange-500 font-medium transition-colors"
                         >
                             Layanan
                         </button>
                         <Link
                             href="/track"
-                            className="text-slate-300 hover:text-cyan-400 font-medium transition-colors"
+                            className="text-zinc-400 hover:text-orange-500 font-medium transition-colors"
                         >
                             Pantau Derek
                         </Link>
                         <Link
                             href="/dashboard"
-                            className="text-slate-300 hover:text-cyan-400 font-medium transition-colors"
+                            className="text-zinc-400 hover:text-orange-500 font-medium transition-colors"
                         >
                             Dashboard
                         </Link>
@@ -82,7 +82,7 @@ export default function Navbar({ settings = {} }: NavbarProps) {
 
                         <button
                             onClick={() => handleNavigation("contact")}
-                            className="bg-cyan-600 text-white px-6 py-2 rounded-full hover:bg-cyan-500 flex items-center gap-2 transition-all shadow-lg shadow-cyan-900/20"
+                            className="bg-orange-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-orange-700 flex items-center gap-2 transition-all shadow-lg shadow-orange-900/20 active:scale-95"
                         >
                             <Phone className="w-4 h-4" />
                             Hubungi Kami

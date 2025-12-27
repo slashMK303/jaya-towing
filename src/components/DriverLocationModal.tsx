@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, Polyline } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { Loader2, Save } from "lucide-react";
+import { Loader2, Save, Activity } from "lucide-react";
 import { updateDriverLocation } from "@/app/actions/bookings";
 
 // Fix for default marker icons
@@ -133,12 +133,19 @@ export default function DriverLocationModal({
     }, [position, pickupLat, pickupLng, dropLat, dropLng]);
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-            <div className="bg-white dark:bg-gray-800 w-full max-w-3xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-                <div className="p-4 border-b dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-700/50">
-                    <h3 className="font-bold text-lg text-gray-900 dark:text-white">Update Posisi Driver</h3>
-                    <button onClick={onClose} className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-                        Tutup
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+            <div className="bg-zinc-900 w-full max-w-3xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] border border-zinc-700 ring-1 ring-white/10">
+                <div className="p-5 border-b border-zinc-800 flex justify-between items-center bg-zinc-950">
+                    <div className="flex items-center gap-3">
+                        <div className="w-2 h-8 rounded-full bg-orange-500" />
+                        <h3 className="font-black text-xl text-white uppercase tracking-tight">Update Posisi Driver</h3>
+                    </div>
+                    <button
+                        onClick={onClose}
+                        className="text-zinc-500 hover:text-white transition-colors p-2 hover:bg-zinc-800 rounded-full"
+                    >
+                        <span className="sr-only">Close</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
                     </button>
                 </div>
 
@@ -146,32 +153,32 @@ export default function DriverLocationModal({
                     <MapContainer
                         center={center}
                         zoom={13}
-                        style={{ height: "100%", width: "100%", position: "absolute" }}
+                        style={{ height: "100%", width: "100%", position: "absolute", background: "#18181b" }}
                     >
                         <TileLayer
                             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
                         />
                         <MapEvents onLocationSelect={(lat, lng) => setPosition(L.latLng(lat, lng))} />
 
                         {/* Pickup Marker Reference */}
                         {pickupLat && pickupLng && (
                             <Marker position={[pickupLat, pickupLng]} icon={LocationIcon} opacity={0.5}>
-                                <Popup>Lokasi Jemput (Referensi)</Popup>
+                                <Popup className="font-sans text-sm font-semibold">Lokasi Jemput (Referensi)</Popup>
                             </Marker>
                         )}
 
                         {/* Dropoff Marker Reference */}
                         {dropLat && dropLng && (
                             <Marker position={[dropLat, dropLng]} icon={DropoffIcon} opacity={0.5}>
-                                <Popup>Lokasi Tujuan (Referensi)</Popup>
+                                <Popup className="font-sans text-sm font-semibold">Lokasi Tujuan (Referensi)</Popup>
                             </Marker>
                         )}
 
                         {/* Driver Marker */}
                         {position && (
                             <Marker position={position} icon={DriverIcon}>
-                                <Popup>Posisi Driver Baru</Popup>
+                                <Popup className="font-sans text-sm font-semibold">Posisi Driver Baru</Popup>
                             </Marker>
                         )}
 
@@ -182,7 +189,7 @@ export default function DriverLocationModal({
                                 color="#f97316"
                                 dashArray="10, 10"
                                 weight={4}
-                                opacity={0.6}
+                                opacity={0.8}
                             />
                         )}
 
@@ -190,7 +197,7 @@ export default function DriverLocationModal({
                         {towingRoute.length > 0 && (
                             <Polyline
                                 positions={towingRoute}
-                                color="#06b6d4"
+                                color="#22c55e"
                                 weight={4}
                                 opacity={0.6}
                             />
@@ -198,20 +205,25 @@ export default function DriverLocationModal({
                     </MapContainer>
 
                     {/* Floating Info Panel */}
-                    <div className="absolute bottom-4 left-4 right-4 bg-white/90 dark:bg-gray-800/90 backdrop-blur p-4 rounded-xl shadow-lg z-[1000] flex justify-between items-center border border-gray-200 dark:border-gray-700">
-                        <div>
-                            <p className="text-xs text-gray-500 dark:text-gray-400 font-semibold uppercase tracking-wide">Koordinat Baru</p>
-                            <p className="font-mono text-sm font-bold text-gray-800 dark:text-gray-200">
-                                {position ? `${position.lat.toFixed(6)}, ${position.lng.toFixed(6)}` : "Klik di peta untuk set posisi"}
-                            </p>
+                    <div className="absolute bottom-6 left-6 right-6 bg-zinc-900/95 backdrop-blur-xl p-5 rounded-2xl shadow-xl z-[1000] flex flex-col md:flex-row justify-between items-center border border-zinc-700/50 gap-4">
+                        <div className="flex items-center gap-4">
+                            <div className="p-3 bg-zinc-950 rounded-xl border border-zinc-800">
+                                <Activity className="w-5 h-5 text-orange-500" />
+                            </div>
+                            <div>
+                                <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mb-0.5">Koordinat Baru</p>
+                                <p className="font-mono text-sm font-bold text-white tracking-wide">
+                                    {position ? `${position.lat.toFixed(6)}, ${position.lng.toFixed(6)}` : "Klik di peta untuk set posisi"}
+                                </p>
+                            </div>
                         </div>
                         <button
                             onClick={handleSave}
                             disabled={!position || loading}
-                            className="flex items-center gap-2 bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-2.5 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md shadow-cyan-500/20"
+                            className="w-full md:w-auto flex items-center justify-center gap-2 bg-orange-600 hover:bg-orange-500 text-white px-8 py-3 rounded-xl font-bold disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed transition-all shadow-lg shadow-orange-900/20 active:scale-95"
                         >
-                            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                            Simpan Lokasi
+                            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
+                            SIMPAN LOKASI
                         </button>
                     </div>
                 </div>

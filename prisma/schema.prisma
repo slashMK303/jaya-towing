@@ -24,17 +24,30 @@ enum Role {
 }
 
 // Services/Layanan Towing
+enum ServiceType {
+  TRANSPORT
+  ON_SITE
+}
+
+enum FleetType {
+  REGULAR
+  FLATBED
+  NONE
+}
+
 model Service {
-  id          String    @id @default(cuid())
+  id          String      @id @default(cuid())
   title       String
-  slug        String    @unique
+  slug        String      @unique
   description String
-  price       Decimal // Base Price / Hook-up Fee
-  pricePerKm  Decimal @default(0) // New field: Biaya per KM
+  price       Decimal     // Base Price / Hook-up Fee
+  pricePerKm  Decimal     @default(0) // New field: Biaya per KM
   image       String?
-  isActive    Boolean   @default(true)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  type        ServiceType @default(TRANSPORT)
+  fleetType   FleetType   @default(REGULAR)
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
   bookings    Booking[]
 }
 
@@ -104,6 +117,17 @@ model Setting {
   id        String   @id @default(cuid())
   key       String   @unique
   value     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  content   String
+  rating    Int      @default(5)
+  avatar    String?
+  isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

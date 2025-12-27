@@ -68,7 +68,7 @@ export default function MapPicker({ onLocationSelect, initialLat, initialLng }: 
     const defaultCenter: L.LatLngExpression = [-6.200000, 106.816666]; // Jakarta
 
     return (
-        <div className="h-[400px] w-full rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600">
+        <div className="h-[400px] w-full rounded-lg overflow-hidden border border-zinc-300 dark:border-zinc-700">
             <MapContainer
                 center={position || defaultCenter}
                 zoom={13}

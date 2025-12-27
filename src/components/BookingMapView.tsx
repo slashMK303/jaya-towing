@@ -133,7 +133,7 @@ export default function BookingMapView({
 
 
     return (
-        <div className="h-[400px] w-full rounded-xl overflow-hidden shadow-inner border dark:border-gray-700 relative">
+        <div className="h-[400px] w-full rounded-xl overflow-hidden shadow-inner border border-zinc-200 dark:border-zinc-700 relative">
             <MapContainer
                 center={points[0] || defaultCenter}
                 zoom={13}
@@ -206,27 +206,27 @@ export default function BookingMapView({
                 {/* Legend Overlay - Only show when active tracking */}
                 {(status === 'IN_PROGRESS' || status === 'CONFIRMED') && (
                     <div className="leaflet-bottom leaflet-left m-4">
-                        <div className="leaflet-control leaflet-bar bg-white/90 dark:bg-gray-800/90 backdrop-blur p-3 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 text-xs space-y-2">
+                        <div className="leaflet-control leaflet-bar bg-white/95 dark:bg-zinc-900/95 backdrop-blur p-4 rounded-xl shadow-xl shadow-zinc-900/20 border border-zinc-200 dark:border-zinc-700 text-xs space-y-3">
                             {activeRouteInfo && (
-                                <div className="mb-2 pb-2 border-b border-gray-200 dark:border-gray-600">
-                                    <p className="font-bold text-gray-900 dark:text-white">
+                                <div className="mb-2 pb-2 border-b border-zinc-100 dark:border-zinc-800">
+                                    <p className="font-bold text-zinc-900 dark:text-white uppercase tracking-wider text-[10px] mb-1">
                                         {activeRouteInfo.type === 'PICKUP' ? 'Estimasi Jemput:' : 'Estimasi Sampai:'}
                                     </p>
-                                    <p className="text-lg font-mono text-orange-600 dark:text-orange-400">
-                                        {activeRouteInfo.time} <span className="text-xs text-gray-500">({activeRouteInfo.dist})</span>
+                                    <p className="text-xl font-black text-orange-600 dark:text-orange-500 font-mono tracking-tight">
+                                        {activeRouteInfo.time} <span className="text-xs text-zinc-500 font-bold">({activeRouteInfo.dist})</span>
                                     </p>
                                 </div>
                             )}
                             <div className="flex items-center gap-2">
                                 <span className="w-4 h-1 bg-orange-500 border-b-2 border-orange-500 border-dashed block"></span>
-                                <span className="text-gray-700 dark:text-gray-200">
+                                <span className="text-zinc-700 dark:text-zinc-300 font-medium">
                                     {activeRouteInfo?.type === 'DROPOFF' ? 'Menuju Tujuan' : 'Menuju Jemput'}
                                 </span>
                             </div>
                             {activeRouteInfo?.type === 'PICKUP' && (
                                 <div className="flex items-center gap-2">
                                     <span className="w-4 h-1 bg-cyan-500 block"></span>
-                                    <span className="text-gray-700 dark:text-gray-200">Rute Pengantaran</span>
+                                    <span className="text-zinc-700 dark:text-zinc-300 font-medium">Rute Pengantaran</span>
                                 </div>
                             )}
                         </div>

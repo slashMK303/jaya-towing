@@ -22,6 +22,8 @@ const serviceSchema = z.object({
     pricePerKm: z.coerce.number().min(0, "Harga per KM tidak boleh negatif").default(0),
     image: z.string().url("URL gambar tidak valid").optional().or(z.literal("")),
     isActive: z.boolean().default(true),
+    type: z.enum(["TRANSPORT", "ON_SITE"]).default("TRANSPORT"),
+    fleetType: z.enum(["REGULAR", "FLATBED", "NONE"]).default("REGULAR"),
 });
 
 export async function createService(formData: FormData) {
@@ -50,6 +52,8 @@ export async function createService(formData: FormData) {
                 pricePerKm: validated.data.pricePerKm,
                 image: validated.data.image || null,
                 isActive: validated.data.isActive,
+                type: validated.data.type,
+                fleetType: validated.data.fleetType,
             },
         });
     } catch (error) {
@@ -87,6 +91,8 @@ export async function updateService(id: string, formData: FormData) {
                 pricePerKm: validated.data.pricePerKm,
                 image: validated.data.image || null,
                 isActive: validated.data.isActive,
+                type: validated.data.type,
+                fleetType: validated.data.fleetType,
             },
         });
     } catch (error) {

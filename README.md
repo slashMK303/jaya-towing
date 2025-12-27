@@ -83,11 +83,21 @@ Untuk masuk ke Dashboard Admin, buka [http://localhost:3000/auth/login](http://l
 - **Manajemen Pesanan**:
   - Melihat daftar semua pesanan masuk.
   - Update status pesanan (Pending -> Confirmed -> Completed).
+  - **Export Data**: Unduh laporan booking ke Excel (.xls).
 - **Manajemen Layanan (CRUD)**:
-  - **Tambah**: Klik "+ Tambah Layanan" untuk membuat produk baru.
-  - **Edit**: Ubah harga, deskripsi, atau gambar layanan.
-  - **Hapus**: Klik ikon sampah untuk menghapus layanan.
-  - **Aktif/Nonaktif**: Sembunyikan layanan dari halaman depan tanpa menghapusnya.
+  - **Tambah**: Mendukung Tipe Layanan (Transport/On-Site) dan Jenis Armada.
+  - **Upload Gambar**: Integrasi Upload File Lokal & URL Eksternal.
+- **Manajemen Konten (CMS)**:
+  - **Testimoni**: Tambah/Hapus ulasan pelanggan untuk halaman depan.
+  - **Pengaturan**: Ganti Judul Website, No HP, Sosial Media, dan Gambar Hero tanpa coding.
+- **Tracking & Maps**:
+  - **Update Lokasi Driver**: Set lokasi driver di peta untuk dilihat customer.
+  - **Rute Otomatis**: Visualisasi rute penjemputan dan pengantaran (OSRM).
+
+### 3. Fitur Canggih
+- **Tracking Real-time**: Halaman khusus untuk customer melacak posisi driver.
+- **Estimasi Harga Dinamis**: Hitung harga otomatis berdasarkan jarak (Google/OSRM) + Harga Dasar.
+- **WhatsApp Integration**: Tombol chat otomatis dengan template pesan (Order ID + Lokasi).
 
 ---
 

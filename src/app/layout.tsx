@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Outfit } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "@/providers/AuthProvider";
 import { getSettings } from "./actions/settings";
 import ConditionalNavbar from "@/components/ConditionalNavbar";
 
-const inter = Inter({ subsets: ["latin"] });
+const outfit = Outfit({ subsets: ["latin"] });
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
@@ -24,7 +24,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${outfit.className} antialiased selection:bg-orange-500 selection:text-white`}>
         <AuthProvider>
           <ConditionalNavbar settings={settings} />
           {children}

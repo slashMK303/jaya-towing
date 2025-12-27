@@ -5,13 +5,16 @@ import { PaymentStatus, BookingStatus } from "@prisma/client";
 
 export async function getDashboardStats() {
     try {
-        // 1. Total Revenue (Sum of totalAmount for PAID bookings)
+        // 1. Total Revenue (Sum of totalAmount for PAID or COMPLETED bookings)
         const revenueAgg = await prisma.booking.aggregate({
             _sum: {
                 totalAmount: true,
             },
             where: {
-                paymentStatus: PaymentStatus.PAID,
+                OR: [
+                    { paymentStatus: PaymentStatus.PAID },
+                    { status: BookingStatus.COMPLETED }
+                ]
             },
         });
 

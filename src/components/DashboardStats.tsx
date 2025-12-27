@@ -12,55 +12,55 @@ interface DashboardStatsProps {
 export default function DashboardStats({ stats }: DashboardStatsProps) {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+            <div className="bg-zinc-900 p-6 rounded-2xl shadow-xl shadow-zinc-950/20 border border-zinc-800 transition-all hover:border-orange-500/30 group">
                 <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium">Total Pendapatan</h3>
-                    <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-full text-green-600 dark:text-green-400">
-                        <CreditCard className="w-6 h-6" />
+                    <h3 className="text-zinc-400 text-xs font-bold uppercase tracking-wider">Total Pendapatan</h3>
+                    <div className="p-3 bg-zinc-800 rounded-xl text-orange-500 group-hover:scale-110 transition-transform">
+                        <CreditCard className="w-5 h-5" />
                     </div>
                 </div>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                    Rp {stats.revenue.toLocaleString("id-ID")}
+                <p className="text-3xl font-black text-white tracking-tight">
+                    Rp {Number(stats.revenue || 0).toLocaleString("id-ID")}
                 </p>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+            <div className="bg-zinc-900 p-6 rounded-2xl shadow-xl shadow-zinc-950/20 border border-zinc-800 transition-all hover:border-orange-500/30 group">
                 <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium">Total Pesanan</h3>
-                    <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-full text-blue-600 dark:text-blue-400">
-                        <ShoppingBag className="w-6 h-6" />
+                    <h3 className="text-zinc-400 text-xs font-bold uppercase tracking-wider">Total Pesanan</h3>
+                    <div className="p-3 bg-zinc-800 rounded-xl text-orange-500 group-hover:scale-110 transition-transform">
+                        <ShoppingBag className="w-5 h-5" />
                     </div>
                 </div>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                <p className="text-3xl font-black text-white tracking-tight">
                     {stats.totalBookings}
                 </p>
-                <p className="text-xs text-gray-500 mt-1">Semua waktu</p>
+                <p className="text-xs text-zinc-500 mt-2 font-medium">Semua waktu</p>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+            <div className="bg-zinc-900 p-6 rounded-2xl shadow-xl shadow-zinc-950/20 border border-zinc-800 transition-all hover:border-orange-500/30 group">
                 <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium">Perlu Tindakan</h3>
-                    <div className="p-3 bg-yellow-100 dark:bg-yellow-900/30 rounded-full text-yellow-600 dark:text-yellow-400">
-                        <Clock className="w-6 h-6" />
+                    <h3 className="text-zinc-400 text-xs font-bold uppercase tracking-wider">Perlu Tindakan</h3>
+                    <div className="p-3 bg-zinc-800 rounded-xl text-orange-500 group-hover:scale-110 transition-transform">
+                        <Clock className="w-5 h-5" />
                     </div>
                 </div>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                <p className="text-3xl font-black text-white tracking-tight">
                     {stats.pendingBookings}
                 </p>
-                <p className="text-xs text-gray-500 mt-1">Status Pending</p>
+                <p className="text-xs text-zinc-500 mt-2 font-medium">Status Pending</p>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+            <div className="bg-zinc-900 p-6 rounded-2xl shadow-xl shadow-zinc-950/20 border border-zinc-800 transition-all hover:border-orange-500/30 group">
                 <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium">Selesai</h3>
-                    <div className="p-3 bg-cyan-100 dark:bg-cyan-900/30 rounded-full text-cyan-600 dark:text-cyan-400">
-                        <CheckCircle className="w-6 h-6" />
+                    <h3 className="text-zinc-400 text-xs font-bold uppercase tracking-wider">Selesai</h3>
+                    <div className="p-3 bg-zinc-800 rounded-xl text-green-500 group-hover:scale-110 transition-transform">
+                        <CheckCircle className="w-5 h-5" />
                     </div>
                 </div>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                <p className="text-3xl font-black text-white tracking-tight">
                     {stats.completedBookings}
                 </p>
-                <p className="text-xs text-gray-500 mt-1">Pesanan Selesai</p>
+                <p className="text-xs text-zinc-500 mt-2 font-medium">Pesanan Selesai</p>
             </div>
         </div>
     );
