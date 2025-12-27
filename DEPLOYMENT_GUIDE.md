@@ -30,6 +30,7 @@ Vercel memiliki database sendiri (powered by Neon) yang bisa dibuat dalam 1 klik
 5.  Setelah terhubung, Vercel akan otomatis menambahkan Environment Variable ke project.
 7.  **Penting**: Masuk ke **Settings** -> **Environment Variables**.
     *   Cari variable bernama `POSTGRES_PRISMA_URL` atau `PRISMA_DATABASE_URL`.
+    *   **Pilih yang mana?** Jika ada dua, biasanya isinya sama. Ambil yang **paling atas** saja.
     *   **Copy** nilainya (yang panjang).
     *   Buat variable baru bernama `DATABASE_URL` dan paste nilai tadi di sana.
 
