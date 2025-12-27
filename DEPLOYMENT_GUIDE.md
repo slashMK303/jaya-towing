@@ -10,16 +10,34 @@ Karena aplikasi ini menggunakan database, Anda tidak bisa hanya deploy kode saja
 
 ---
 
-## 📦 Langkah 1: Setup Database Online (Supabase)
-Kita akan menggunakan Supabase karena gratis dan mudah.
+## 📦 Langkah 1: Setup Database
+
+Anda punya 2 pilihan mudah: **Vercel Postgres** (Terintegrasi) atau **Supabase** (Terpisah).
+
+### Opsi A: Vercel Postgres (Paling Mudah)
+Vercel memiliki database sendiri (powered by Neon) yang bisa dibuat dalam 1 klik.
+
+1.  Buka Project Anda di [Vercel](https://vercel.com).
+2.  Masuk ke tab **Storage**.
+3.  Klik **Connect Store** -> **Create New** -> Pilih **Postgres**.
+4.  Beri nama (misal: `vin-towing-db`) dan Region (Singapore `sin1`).
+5.  Klik **Create**.
+6.  Setelah jadi, Vercel akan otomatis menambahkan Environment Variable (`POSTGRES_URL`, dll) ke project Anda.
+7.  **Penting**: Masuk ke **Settings** -> **Environment Variables**.
+    *   Cari variable bernama `POSTGRES_PRISMA_URL`.
+    *   Copy nilainya.
+    *   Buat variable baru bernama `DATABASE_URL` dan paste nilai tadi di sana.
+
+### Opsi B: Supabase (Alternatif Populer)
+Jika ingin dashboard database yang lebih lengkap terpisah dari Vercel.
 
 1.  Buka [Supabase.com](https://supabase.com/) dan Login/Sign Up.
 2.  Klik **"New Project"**.
 3.  Isi form:
     *   **Name**: `vin-towing-db` (bebas).
     *   **Database Password**: Buat password kuat (Simpan! Jangan sampai lupa).
-    *   **Region**: Singapore (Terdekat dengan Indonesia).
-4.  Klik **"Create new project"** dan tunggu loading selesai (hijau).
+    *   **Region**: Singapore.
+4.  Klik **"Create new project"**.
 5.  Masuk ke menu **Project Settings** (icon gerigi) -> **Database**.
 6.  Scroll ke bagian **Connection String** -> Pilih **URI**.
 7.  **Salin** text koneksi yang muncul.
