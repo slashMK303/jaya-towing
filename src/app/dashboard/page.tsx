@@ -11,6 +11,11 @@ export default async function DashboardPage() {
             <h1 className="text-2xl font-black mb-6 text-white tracking-tight">Dashboard Overview</h1>
 
             {/* Statistik Kartu */}
+            {stats.error && (
+                <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 mb-6 text-red-500 text-sm font-mono break-all">
+                    <strong>Debug Info:</strong> {stats.error}
+                </div>
+            )}
             <DashboardStats stats={stats} />
 
             {/* Recent Bookings Table */}

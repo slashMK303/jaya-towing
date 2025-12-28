@@ -63,6 +63,7 @@ export default function BookingForm({
     const [distance, setDistance] = useState<number>(0); // in KM
     const [estimatedPrice, setEstimatedPrice] = useState<number>(basePrice);
     const [successData, setSuccessData] = useState<{ id: string; trackingCode: string } | null>(null);
+    const [isRedirecting, setIsRedirecting] = useState(false);
 
     // Dynamic Schema based on Service Type
     const currentSchema = z.object({
@@ -186,13 +187,25 @@ export default function BookingForm({
                 window.snap.pay(result.midtransToken, {
                     onSuccess: function (midtransResult: any) {
                         setSuccessData({ id: result.id, trackingCode: result.trackingCode });
+                        setIsRedirecting(true);
+                        // Auto redirect to tracking page
+                        router.push(`/track?code=${result.trackingCode}`);
                     },
                     onPending: function (midtransResult: any) {
                         setSuccessData({ id: result.id, trackingCode: result.trackingCode });
+                        setIsRedirecting(true);
+                        // Auto redirect to tracking page for pending payments (e.g. VA)
+                        router.push(`/track?code=${result.trackingCode}`);
                     },
                     onError: function (midtransResult: any) {
                         setError("Pembayaran Gagal! Silakan coba lagi atau pilih COD.");
                     },
+                    onClose: function () {
+                        // Optional: Handle if user closes without finishing (though success/pending usually fire first if done)
+                        if (!successData) {
+                            setError("Pembayaran dibatalkan atau belum selesai.");
+                        }
+                    }
                 });
             } else {
                 setSuccessData({ id: result.id, trackingCode: result.trackingCode });
@@ -459,13 +472,19 @@ export default function BookingForm({
                 <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-zinc-950/90 backdrop-blur-md animate-in fade-in duration-300">
                     <div className="bg-zinc-900 rounded-3xl shadow-2xl w-full max-w-md overflow-hidden p-8 text-center border border-zinc-800 transform scale-100 animate-in zoom-in-95 duration-300 ring-1 ring-white/10">
                         <div className="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6 ring-1 ring-green-500/20 shadow-[0_0_40px_-10px_rgba(34,197,94,0.3)]">
-                            <Check className="w-10 h-10 text-green-500" />
+                            {isRedirecting ? (
+                                <div className="w-10 h-10 border-4 border-green-500 border-t-transparent rounded-full animate-spin" />
+                            ) : (
+                                <Check className="w-10 h-10 text-green-500" />
+                            )}
                         </div>
                         <h4 className="text-3xl font-black text-white mb-3 tracking-tight">
-                            Pemesanan Berhasil!
+                            {isRedirecting ? "Mengalihkan..." : "Pemesanan Berhasil!"}
                         </h4>
                         <p className="text-zinc-400 mb-8 leading-relaxed text-sm">
-                            Terima kasih telah memesan layanan kami. Tim kami akan segera menuju ke lokasi Anda.
+                            {isRedirecting
+                                ? "Mohon tunggu sebentar, Anda sedang diarahkan ke halaman pelacakan..."
+                                : "Terima kasih telah memesan layanan kami. Tim kami akan segera menuju ke lokasi Anda."}
                         </p>
                         <div className="bg-zinc-950 p-6 rounded-2xl border border-dashed border-zinc-800 mb-8 group hover:border-orange-500/30 transition-colors">
                             <span className="text-[10px] text-zinc-500 block uppercase tracking-widest font-bold mb-2">Kode Lacak Anda</span>
