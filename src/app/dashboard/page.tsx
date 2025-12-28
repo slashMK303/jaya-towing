@@ -3,6 +3,8 @@ import { getDashboardStats } from "../actions/dashboard";
 import DashboardStats from "@/components/DashboardStats";
 import { ArrowRight } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function DashboardPage() {
     const stats = await getDashboardStats();
 
