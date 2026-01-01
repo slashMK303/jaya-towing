@@ -4,6 +4,7 @@ import "./globals.css";
 import AuthProvider from "@/providers/AuthProvider";
 import { getSettings } from "./actions/settings";
 import ConditionalNavbar from "@/components/ConditionalNavbar";
+import ChatBot from "@/components/ChatBot";
 
 const outfit = Outfit({ subsets: ["latin"] });
 
@@ -28,8 +29,10 @@ export default async function RootLayout({
         <AuthProvider>
           <ConditionalNavbar settings={settings} />
           {children}
+          <ChatBot />
         </AuthProvider>
       </body>
     </html>
   );
 }
+

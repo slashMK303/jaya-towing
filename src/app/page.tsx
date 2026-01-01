@@ -58,7 +58,9 @@ export default async function Home() {
             Jangan ragu hubungi kami. Tim kami standby 24/7 untuk membantu masalah kendaraan Anda dimanapun berada.
           </p>
           <a
-            href={`tel:${contactPhone}`}
+            href={`https://wa.me/${contactPhone.replace(/\D/g, "").replace(/^0/, "62")}`}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-3 bg-white text-orange-600 px-8 py-4 rounded-xl font-bold text-lg hover:bg-zinc-100 transition-all shadow-xl hover:scale-105"
           >
             <Phone className="w-6 h-6 fill-current" />
@@ -103,7 +105,7 @@ export default async function Home() {
             <p>&copy; {new Date().getFullYear()} {businessName}. All rights reserved.</p>
           </div>
         </div>
-      </footer>
-    </div>
+      </footer >
+    </div >
   );
 }
