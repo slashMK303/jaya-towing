@@ -231,12 +231,28 @@ export async function POST(req: Request) {
         });
 
         return result.toUIMessageStreamResponse();
-    } catch (error: unknown) {
+    } catch (error: any) {
         console.error("Chat API Error:", error);
-        const errorMessage = error instanceof Error ? error.message : "Unknown error";
+
+        // Log detailed error from AI provider if available
+        if (error.cause) {
+            console.error("Error cause:", error.cause);
+        }
+        if (error.response) {
+            console.error("Error response:", await error.response.text());
+        }
+
+        const errorMessage = error.message || "Unknown error occurred";
+
         return new Response(
-            JSON.stringify({ error: "Terjadi kesalahan pada chat", details: errorMessage }),
-            { status: 500, headers: { "Content-Type": "application/json" } }
+            JSON.stringify({
+                error: "Terjadi kesalahan pada sistem chat",
+                details: errorMessage
+            }),
+            {
+                status: 500,
+                headers: { "Content-Type": "application/json" }
+            }
         );
     }
 }

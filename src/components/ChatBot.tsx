@@ -207,7 +207,8 @@ export default function ChatBot() {
 
                         {error && (
                             <div className="bg-red-900/20 border border-red-900/50 text-red-400 text-sm px-4 py-2 rounded-lg text-center">
-                                Maaf, terjadi kesalahan. Silakan coba lagi.
+                                <p className="font-bold">Maaf, terjadi kesalahan.</p>
+                                <p className="text-xs mt-1 opacity-80">{error.message}</p>
                             </div>
                         )}
 
