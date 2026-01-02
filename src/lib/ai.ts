@@ -1,16 +1,17 @@
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 
 // Local LLM provider configuration
-// Using Qwen3-14B-Q4_K_M model hosted at llm.pandjiputra.cloud
-// This is a self-hosted model with 8,192 context tokens
+// URL and model are loaded from environment variables for security
+// Set LLM_BASE_URL and LLM_MODEL_NAME in your .env.local file
 export const localLLM = createOpenAICompatible({
     name: "local-qwen",
-    baseURL: "https://llm.pandjiputra.cloud/v1",
-    // No API key needed for this self-hosted instance
+    baseURL: process.env.LLM_BASE_URL || "http://localhost:8080/v1",
+    apiKey: process.env.LLM_API_KEY, // Optional, only if your LLM server requires auth
     headers: {
         "Content-Type": "application/json",
     },
 });
 
-// Model name for the local Qwen3 instance (from /v1/models)
-export const MODEL_NAME = "Qwen3-14B-Q4_K_M.gguf";
+// Model name for the local LLM instance (from /v1/models endpoint)
+export const MODEL_NAME = process.env.LLM_MODEL_NAME || "";
+
