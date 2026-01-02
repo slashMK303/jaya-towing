@@ -1,17 +1,14 @@
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 
-// Local LLM provider configuration
-// URL and model are loaded from environment variables for security
-// Set LLM_BASE_URL and LLM_MODEL_NAME in your .env.local file
-export const localLLM = createOpenAICompatible({
-    name: "local-qwen",
-    baseURL: process.env.LLM_BASE_URL || "http://localhost:8080/v1",
-    apiKey: process.env.LLM_API_KEY, // Optional, only if your LLM server requires auth
-    headers: {
-        "Content-Type": "application/json",
-    },
+// OpenRouter provider configuration
+// Uses OPENROUTER_API_KEY from environment variables
+// Using @ai-sdk/openai-compatible because OpenRouter uses chat/completions API
+export const openrouter = createOpenAICompatible({
+    name: "openrouter",
+    baseURL: "https://openrouter.ai/api/v1",
+    apiKey: process.env.OPENROUTER_API_KEY,
 });
 
-// Model name for the local LLM instance (from /v1/models endpoint)
-export const MODEL_NAME = process.env.LLM_MODEL_NAME || "";
+// Free model to use - nvidia/nemotron-3-nano-30b-a3b:free
+export const FREE_MODEL = "nvidia/nemotron-3-nano-30b-a3b:free";
 

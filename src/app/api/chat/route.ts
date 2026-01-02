@@ -1,4 +1,4 @@
-import { localLLM, MODEL_NAME } from "@/lib/ai";
+import { openrouter, FREE_MODEL } from "@/lib/ai";
 import { streamText, convertToModelMessages, stepCountIs } from "ai";
 import type { UIMessage } from "ai";
 import { z } from "zod";
@@ -164,9 +164,7 @@ CONTOH FORMAT LAYANAN:
 • **Towing Motor**
   Biaya: Rp 50.000 + Rp 5.000/km
 
-Akhiri jawaban dengan menawarkan bantuan pemesanan via WhatsApp atau menu Booking.
-
-/no_think`;
+Akhiri jawaban dengan menawarkan bantuan pemesanan via WhatsApp atau menu Booking.`;
 }
 
 export async function POST(req: Request) {
@@ -211,7 +209,7 @@ export async function POST(req: Request) {
         console.log("Sanitized Messages:", JSON.stringify(coreMessages, null, 2));
 
         const result = streamText({
-            model: localLLM(MODEL_NAME),
+            model: openrouter(FREE_MODEL),
             messages: coreMessages as any, // Cast to any to bypass strict type check on sanitized input if needed
             system: systemPrompt,
             tools: {
