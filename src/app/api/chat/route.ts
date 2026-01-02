@@ -1,5 +1,5 @@
-import { openrouter, FREE_MODEL } from "@/lib/ai";
-import { streamText, convertToModelMessages } from "ai";
+import { localLLM, MODEL_NAME } from "@/lib/ai";
+import { streamText, convertToModelMessages, stepCountIs } from "ai";
 import type { UIMessage } from "ai";
 import { z } from "zod";
 import prisma from "@/lib/prisma";
@@ -164,7 +164,9 @@ CONTOH FORMAT LAYANAN:
 • **Towing Motor**
   Biaya: Rp 50.000 + Rp 5.000/km
 
-Akhiri jawaban dengan menawarkan bantuan pemesanan via WhatsApp atau menu Booking.`;
+Akhiri jawaban dengan menawarkan bantuan pemesanan via WhatsApp atau menu Booking.
+
+/no_think`;
 }
 
 export async function POST(req: Request) {
@@ -176,9 +178,41 @@ export async function POST(req: Request) {
         const businessName = settingsMap.business_name || settingsMap.businessName || "Layanan Towing";
         const systemPrompt = generateSystemPrompt(businessName);
 
+        // Sanitize messages to strictly match expected format
+        const coreMessages = messages.map((m: any) => {
+            // Ensure role is valid
+            const role = ["system", "user", "assistant", "data"].includes(m.role) ? m.role : "user";
+
+            // Extract content - AI SDK v6 uses "parts" array
+            let content = "";
+
+            // First try: direct string content
+            if (typeof m.content === "string" && m.content.trim()) {
+                content = m.content;
+            }
+            // Second try: content as array (older format)
+            else if (Array.isArray(m.content)) {
+                content = m.content
+                    .filter((c: any) => c.type === "text" && c.text)
+                    .map((c: any) => c.text)
+                    .join("\n");
+            }
+            // Third try: AI SDK v6 uses "parts" array
+            else if (Array.isArray(m.parts)) {
+                content = m.parts
+                    .filter((p: any) => p.type === "text" && p.text)
+                    .map((p: any) => p.text)
+                    .join("\n");
+            }
+
+            return { role, content };
+        });
+
+        console.log("Sanitized Messages:", JSON.stringify(coreMessages, null, 2));
+
         const result = streamText({
-            model: openrouter(FREE_MODEL),
-            messages: await convertToModelMessages(messages),
+            model: localLLM(MODEL_NAME),
+            messages: coreMessages as any, // Cast to any to bypass strict type check on sanitized input if needed
             system: systemPrompt,
             tools: {
                 getServices: {
@@ -228,8 +262,11 @@ export async function POST(req: Request) {
                     },
                 },
             },
+            // Enable multi-step tool calls - AI will continue generating after tool results
+            stopWhen: stepCountIs(5),
         });
 
+        console.log("Stream started successfully");
         return result.toUIMessageStreamResponse();
     } catch (error: any) {
         console.error("Chat API Error:", error);

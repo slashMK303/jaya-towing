@@ -114,7 +114,7 @@ export default function ChatBot() {
                             <Bot className="w-6 h-6 text-orange-500" />
                         </div>
                         <div className="flex-1">
-                            <h3 className="font-bold text-white">{settings.businessName} AI</h3>
+                            <h3 className="font-bold text-white">{settings.businessName} Assistant</h3>
                             <p className="text-xs text-zinc-400">Siap membantu 24 jam</p>
                         </div>
                         <button
