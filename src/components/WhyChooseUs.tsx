@@ -25,7 +25,6 @@ export default function WhyChooseUs() {
                         </p>
                     </div>
 
-                    {/* Card 2 */}
                     <div className="bg-zinc-900/50 border border-zinc-800 p-8 rounded-2xl hover:bg-zinc-900 transition-all group">
                         <div className="w-14 h-14 bg-blue-500/10 rounded-xl flex items-center justify-center mb-6 border border-blue-500/20 group-hover:scale-110 transition-transform">
                             <Zap className="w-7 h-7 text-blue-500" />
@@ -36,7 +35,6 @@ export default function WhyChooseUs() {
                         </p>
                     </div>
 
-                    {/* Card 3 */}
                     <div className="bg-zinc-900/50 border border-zinc-800 p-8 rounded-2xl hover:bg-zinc-900 transition-all group">
                         <div className="w-14 h-14 bg-green-500/10 rounded-xl flex items-center justify-center mb-6 border border-green-500/20 group-hover:scale-110 transition-transform">
                             <ShieldCheck className="w-7 h-7 text-green-500" />

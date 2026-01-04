@@ -20,7 +20,7 @@ export async function createTestimonial(data: any) {
             name: data.name,
             content: data.content,
             rating: Number(data.rating),
-            isActive: true, // Default active
+            isActive: true,
         }
     });
     revalidatePath("/");

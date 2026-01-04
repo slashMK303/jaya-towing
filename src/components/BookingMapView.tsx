@@ -5,7 +5,6 @@ import { MapContainer, TileLayer, Marker, Popup, useMap, Polyline } from "react-
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
-// Fix for default marker icons
 const PickupIcon = L.icon({
     iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png",
     shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
@@ -21,7 +20,7 @@ const DropoffIcon = L.icon({
 });
 
 const TruckIcon = L.icon({
-    iconUrl: "https://cdn-icons-png.flaticon.com/512/3202/3202926.png", // Alternative truck icon
+    iconUrl: "https://cdn-icons-png.flaticon.com/512/3202/3202926.png",
     iconSize: [40, 40],
     iconAnchor: [20, 20],
 });
@@ -61,7 +60,6 @@ export default function BookingMapView({
     const [towingRoute, setTowingRoute] = useState<L.LatLngExpression[]>([]);
     const [activeRouteInfo, setActiveRouteInfo] = useState<{ dist: string, time: string, type: 'PICKUP' | 'DROPOFF' } | null>(null);
 
-    // Helper: Fetch OSRM Route
     const fetchRoute = async (
         start: [number, number],
         end: [number, number],
@@ -82,7 +80,6 @@ export default function BookingMapView({
                 const durationMins = Math.round(data.routes[0].duration / 60);
 
                 if (mode === 'ACTIVE_PICKUP') {
-                    // Check if "ARRIVED" at pickup (< 200m)
                     if (distanceMeters < 200) {
                         return 'ARRIVED';
                     }
@@ -90,7 +87,6 @@ export default function BookingMapView({
                 } else if (mode === 'ACTIVE_DROPOFF') {
                     setActiveRouteInfo({ dist: `${distanceKm} km`, time: `${durationMins} mnt`, type: 'DROPOFF' });
                 }
-                // 'STATIC_ONLY' does nothing to active info
             }
         } catch (error) {
             console.error("OSRM Fetch Error:", error);
@@ -101,24 +97,17 @@ export default function BookingMapView({
 
     useEffect(() => {
         const updateRoutes = async () => {
-            // 1. Static Towing Route (Pickup -> Dropoff) - Visual Only
-            // We use 'STATIC_ONLY' so it DOES NOT touch the active estimation info
             if (pickupLat && pickupLng && dropLat && dropLng) {
                 fetchRoute([pickupLat, pickupLng], [dropLat, dropLng], setTowingRoute, 'STATIC_ONLY');
             }
 
-            // 2. Active Driver Calculation based on STATUS only
             if (driverLat && driverLng && pickupLat && pickupLng && dropLat && dropLng) {
                 if (status === "CONFIRMED") {
-                    // Status CONFIRMED = Driver OTW to Pickup
                     fetchRoute([driverLat, driverLng], [pickupLat, pickupLng], setPickupRoute, 'ACTIVE_PICKUP');
                 }
                 else if (status === "IN_PROGRESS") {
-                    // Status IN_PROGRESS = Unit Loaded, OTW to Dropoff
-                    // Use Driver -> Dropoff route
                     fetchRoute([driverLat, driverLng], [dropLat, dropLng], setPickupRoute, 'ACTIVE_DROPOFF');
                 } else {
-                    // COMPLETED, PENDING, etc.
                     setPickupRoute([]);
                     setActiveRouteInfo(null);
                 }
@@ -171,12 +160,11 @@ export default function BookingMapView({
                     </Marker>
                 )}
 
-                {/* Active Route (Orange): Driver -> Pickup OR Driver -> Dropoff */}
                 {pickupRoute.length > 0 && (
                     <Polyline
                         positions={pickupRoute}
-                        color="#f97316" // Orange
-                        dashArray="10, 10" // Garis putus-putus
+                        color="#f97316" 
+                        dashArray="10, 10" 
                         weight={5}
                         opacity={0.8}
                     >
@@ -188,12 +176,10 @@ export default function BookingMapView({
                     </Polyline>
                 )}
 
-                {/* Static Towing Route: Pickup -> Dropoff */}
-                {/* Show when in PICKUP phase (Cyan) OR when COMPLETED (Green) */}
                 {towingRoute.length > 0 && ((activeRouteInfo?.type === 'PICKUP') || (status === 'COMPLETED')) && (
                     <Polyline
                         positions={towingRoute}
-                        color={status === 'COMPLETED' ? "#22c55e" : "#06b6d4"} // Green if Completed, else Cyan
+                        color={status === 'COMPLETED' ? "#22c55e" : "#06b6d4"}
                         weight={5}
                         opacity={status === 'COMPLETED' ? 0.8 : 0.4}
                     >
@@ -203,7 +189,6 @@ export default function BookingMapView({
 
                 <ZoomToMarkers points={points} />
 
-                {/* Legend Overlay - Only show when active tracking */}
                 {(status === 'IN_PROGRESS' || status === 'CONFIRMED') && (
                     <div className="leaflet-bottom leaflet-left m-4">
                         <div className="leaflet-control leaflet-bar bg-white/95 dark:bg-zinc-900/95 backdrop-blur p-4 rounded-xl shadow-xl shadow-zinc-900/20 border border-zinc-200 dark:border-zinc-700 text-xs space-y-3">

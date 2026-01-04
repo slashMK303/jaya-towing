@@ -7,13 +7,10 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const filters: any = {};
 
-    // 1. Status Filter
     const status = searchParams.get("status");
     if (status && status !== "ALL") {
         filters.status = status as BookingStatus;
     }
-
-    // 2. Search (Name or ID)
     const q = searchParams.get("q");
     if (q) {
         filters.OR = [
@@ -23,7 +20,6 @@ export async function GET(req: Request) {
         ];
     }
 
-    // 3. Date Filter
     const dateRange = searchParams.get("date");
     if (dateRange && dateRange !== "ALL") {
         const now = new Date();
@@ -49,8 +45,6 @@ export async function GET(req: Request) {
             include: { service: true },
         });
 
-        // Serialize to HTML Table for Excel
-        // This method forces Excel to render it as a proper table with borders
         let htmlTable = `
         <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
         <head>

@@ -22,10 +22,8 @@ export default function DashboardSidebar({ settings = {} }: NavbarProps) {
     const pathname = usePathname();
     const businessName = settings.business_name || "NMK Towing";
 
-    // Mobile Sidebar State
     const [isOpen, setIsOpen] = useState(false);
 
-    // Close sidebar when navigating on mobile
     useEffect(() => {
         setIsOpen(false);
     }, [pathname]);

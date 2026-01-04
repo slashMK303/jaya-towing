@@ -7,7 +7,6 @@ import L from "leaflet";
 import { Loader2, Save, Activity } from "lucide-react";
 import { updateDriverLocation } from "@/app/actions/bookings";
 
-// Fix for default marker icons
 const DriverIcon = L.icon({
     iconUrl: "https://cdn-icons-png.flaticon.com/512/3202/3202926.png",
     iconSize: [40, 40],
@@ -63,7 +62,6 @@ export default function DriverLocationModal({
     );
     const [loading, setLoading] = useState(false);
 
-    // Default center: Current driver pos -> Pickup pos -> Default Jakarta
     const center: L.LatLngExpression =
         currentLat && currentLng ? [currentLat, currentLng] :
             pickupLat && pickupLng ? [pickupLat, pickupLng] :
@@ -84,12 +82,10 @@ export default function DriverLocationModal({
         }
     };
 
-    // OSRM Logic for Admin Modal
     const [routePath, setRoutePath] = useState<L.LatLngExpression[]>([]);
     const [towingRoute, setTowingRoute] = useState<L.LatLngExpression[]>([]);
 
     useEffect(() => {
-        // Driver -> Pickup
         const fetchDriverRoute = async () => {
             if (position && pickupLat && pickupLng) {
                 try {
@@ -107,7 +103,6 @@ export default function DriverLocationModal({
             }
         };
 
-        // Pickup -> Dropoff
         const fetchTowingRoute = async () => {
             if (pickupLat && pickupLng && dropLat && dropLng) {
                 try {

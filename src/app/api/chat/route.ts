@@ -6,7 +6,6 @@ import prisma from "@/lib/prisma";
 
 export const maxDuration = 30;
 
-// Get business settings from database
 async function getSettingsMap(): Promise<Record<string, string>> {
     const settings = await prisma.setting.findMany();
     const settingsMap: Record<string, string> = {};
@@ -16,7 +15,6 @@ async function getSettingsMap(): Promise<Record<string, string>> {
     return settingsMap;
 }
 
-// Tool: Get all active services
 async function getServices() {
     const services = await prisma.service.findMany({
         where: { isActive: true },
@@ -39,7 +37,6 @@ async function getServices() {
     }));
 }
 
-// Tool: Get services by type
 async function getServicesByType(type: "TRANSPORT" | "ON_SITE") {
     const services = await prisma.service.findMany({
         where: { isActive: true, type },
@@ -61,7 +58,6 @@ async function getServicesByType(type: "TRANSPORT" | "ON_SITE") {
     }));
 }
 
-// Tool: Get business info from settings
 async function getBusinessInfo() {
     const settingsMap = await getSettingsMap();
 
@@ -76,7 +72,6 @@ async function getBusinessInfo() {
     };
 }
 
-// Tool: Track booking by tracking code
 async function trackBooking(trackingCode: string) {
     const booking = await prisma.booking.findUnique({
         where: { trackingCode },
@@ -113,15 +108,11 @@ async function trackBooking(trackingCode: string) {
     };
 }
 
-// Generate dynamic system prompt with business name from database
-// Generate dynamic system prompt with business name from database
-// Tool: Get website content (Dynamic content like About Us, Visions, FAQs)
 async function getWebsiteContent() {
     const contents = await prisma.content.findMany({
         select: { key: true, value: true, type: true }
     });
 
-    // Transform to simple key-value for AI
     const contentMap: Record<string, string> = {};
     contents.forEach(c => {
         contentMap[c.key] = c.value;
@@ -130,7 +121,6 @@ async function getWebsiteContent() {
     return contentMap;
 }
 
-// Tool: Get testimonials
 async function getTestimonials() {
     const testimonials = await prisma.testimonial.findMany({
         where: { isActive: true },
@@ -141,7 +131,6 @@ async function getTestimonials() {
     return testimonials;
 }
 
-// Generate dynamic system prompt with business name from database
 function generateSystemPrompt(businessName: string) {
     return `Kamu adalah asisten resmi ${businessName}.
 Tugas: Jawab pertanyaan customer tentang layanan towing, profil perusahaan, dan testimoni.
@@ -171,31 +160,24 @@ export async function POST(req: Request) {
     try {
         const { messages }: { messages: UIMessage[] } = await req.json();
 
-        // Fetch business name dynamically from database
         const settingsMap = await getSettingsMap();
         const businessName = settingsMap.business_name || settingsMap.businessName || "Layanan Towing";
         const systemPrompt = generateSystemPrompt(businessName);
 
-        // Sanitize messages to strictly match expected format
         const coreMessages = messages.map((m: any) => {
-            // Ensure role is valid
             const role = ["system", "user", "assistant", "data"].includes(m.role) ? m.role : "user";
 
-            // Extract content - AI SDK v6 uses "parts" array
             let content = "";
 
-            // First try: direct string content
             if (typeof m.content === "string" && m.content.trim()) {
                 content = m.content;
             }
-            // Second try: content as array (older format)
             else if (Array.isArray(m.content)) {
                 content = m.content
                     .filter((c: any) => c.type === "text" && c.text)
                     .map((c: any) => c.text)
                     .join("\n");
             }
-            // Third try: AI SDK v6 uses "parts" array
             else if (Array.isArray(m.parts)) {
                 content = m.parts
                     .filter((p: any) => p.type === "text" && p.text)
@@ -210,7 +192,7 @@ export async function POST(req: Request) {
 
         const result = streamText({
             model: openrouter(FREE_MODEL),
-            messages: coreMessages as any, // Cast to any to bypass strict type check on sanitized input if needed
+            messages: coreMessages as any,
             system: systemPrompt,
             tools: {
                 getServices: {
@@ -260,7 +242,6 @@ export async function POST(req: Request) {
                     },
                 },
             },
-            // Enable multi-step tool calls - AI will continue generating after tool results
             stopWhen: stepCountIs(5),
         });
 
@@ -269,7 +250,6 @@ export async function POST(req: Request) {
     } catch (error: any) {
         console.error("Chat API Error:", error);
 
-        // Log detailed error from AI provider if available
         if (error.cause) {
             console.error("Error cause:", error.cause);
         }

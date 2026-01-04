@@ -4,7 +4,6 @@ import prisma from "@/lib/prisma";
 import { PaymentStatus, BookingStatus } from "@prisma/client";
 
 export async function getDashboardStats() {
-    // Initialize default values
     let revenue = 0;
     let totalBookings = 0;
     let pendingBookings = 0;
@@ -13,7 +12,6 @@ export async function getDashboardStats() {
     let errors: string[] = [];
 
     try {
-        // 1. Total Revenue
         try {
             const revenueAgg = await prisma.booking.aggregate({
                 _sum: {
@@ -32,7 +30,6 @@ export async function getDashboardStats() {
             errors.push(`Revenue Error: ${e.message}`);
         }
 
-        // 2. Total Bookings Count
         try {
             totalBookings = await prisma.booking.count();
         } catch (e: any) {
@@ -40,7 +37,6 @@ export async function getDashboardStats() {
             errors.push(`Total Bookings Error: ${e.message}`);
         }
 
-        // 3. Pending Bookings
         try {
             pendingBookings = await prisma.booking.count({
                 where: {
@@ -52,7 +48,6 @@ export async function getDashboardStats() {
             errors.push(`Pending Bookings Error: ${e.message}`);
         }
 
-        // 4. Completed Bookings
         try {
             completedBookings = await prisma.booking.count({
                 where: {
@@ -64,7 +59,6 @@ export async function getDashboardStats() {
             errors.push(`Completed Bookings Error: ${e.message}`);
         }
 
-        // 5. Recent Bookings
         try {
             const rawRecentBookings = await prisma.booking.findMany({
                 take: 5,
@@ -77,7 +71,7 @@ export async function getDashboardStats() {
                             title: true,
                         },
                     },
-                    // User relation might be null for guest checkouts, so we handle it carefully in UI
+
                     user: {
                         select: {
                             name: true,
@@ -87,13 +81,11 @@ export async function getDashboardStats() {
                 },
             });
 
-            // Safe serialization for Decimal and potential null dates/relation
             recentBookings = rawRecentBookings.map(booking => ({
                 ...booking,
                 totalAmount: Number(booking.totalAmount),
                 service: {
                     ...booking.service,
-                    // If service price is decimal, convert it too if needed, though here we only select title
                 },
             }));
 
@@ -108,11 +100,9 @@ export async function getDashboardStats() {
             pendingBookings,
             completedBookings,
             recentBookings,
-            // Return combined error message if any occurred
             error: errors.length > 0 ? errors.join(" | ") : undefined
         };
     } catch (globalError: any) {
-        // Catastrophic failure (e.g., Prisma client init failed)
         console.error("Critical error in getDashboardStats:", globalError);
         return {
             revenue: 0,

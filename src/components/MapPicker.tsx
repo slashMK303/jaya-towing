@@ -6,7 +6,6 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import debounce from "lodash.debounce";
 
-// Fix for default marker icons in Leaflet with Next.js
 const DefaultIcon = L.icon({
     iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
     shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
@@ -65,7 +64,7 @@ export default function MapPicker({ onLocationSelect, initialLat, initialLng }: 
         initialLat && initialLng ? L.latLng(initialLat, initialLng) : null
     );
 
-    const defaultCenter: L.LatLngExpression = [-6.200000, 106.816666]; // Jakarta
+    const defaultCenter: L.LatLngExpression = [-6.200000, 106.816666];
 
     return (
         <div className="h-[400px] w-full rounded-lg overflow-hidden border border-zinc-300 dark:border-zinc-700">

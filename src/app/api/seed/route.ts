@@ -1,6 +1,6 @@
 
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/prisma'; // Use the shared client
+import prisma from '@/lib/prisma';
 
 export async function GET() {
     const services = [

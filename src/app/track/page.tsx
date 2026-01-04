@@ -5,7 +5,6 @@ import { useSearchParams, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { Search, Loader2, MapPin, Navigation, Clock, Phone, CheckCircle2 } from "lucide-react";
 
-// Dynamically import Map component to avoid SSR issues
 const MapView = dynamic<any>(() => import("@/components/BookingMapView"), {
     ssr: false,
     loading: () => <div className="h-[400px] w-full bg-zinc-900 animate-pulse rounded-xl flex items-center justify-center text-zinc-500">Memuat Peta Lacak...</div>
@@ -14,11 +13,9 @@ const MapView = dynamic<any>(() => import("@/components/BookingMapView"), {
 import { updateBookingStatus } from "@/app/actions/bookings";
 import { getSettings } from "@/app/actions/settings";
 
-// ... previous imports ...
-
 function TrackContent() {
     const searchParams = useSearchParams();
-    const router = useRouter(); // Use App Router
+    const router = useRouter();
     const [code, setCode] = useState(searchParams.get("code") || "");
     const [loading, setLoading] = useState(false);
     const [booking, setBooking] = useState<any>(null);
@@ -63,7 +60,6 @@ function TrackContent() {
         try {
             await updateBookingStatus(booking.id, "COMPLETED");
             setShowCompleteModal(false);
-            // Refresh data
             handleSearch();
         } catch (err) {
             alert("Gagal mengupdate status");
@@ -90,15 +86,12 @@ function TrackContent() {
 
     return (
         <div className="max-w-5xl mx-auto p-4 sm:p-8">
-            {/* ... Existing Title and Form ... */}
-
             <div className="text-center mb-10">
                 <h1 className="text-3xl font-black tracking-tight text-white mb-4">Pantau Derek Towing</h1>
                 <p className="text-zinc-400">Masukkan kode lacak Anda untuk memantau posisi mobil derek</p>
             </div>
 
             <form onSubmit={handleSearch} className="flex gap-2 max-w-xl mx-auto mb-12">
-                {/* ... input ... */}
                 <div className="relative flex-1">
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" />
                     <input
@@ -118,7 +111,6 @@ function TrackContent() {
                 </button>
             </form>
 
-            {/* ... Error ... */}
             {error && (
                 <div className="text-center p-8 bg-red-900/20 text-red-400 rounded-2xl border border-red-900/50 max-w-xl mx-auto animate-in fade-in zoom-in-95">
                     <p className="font-medium">{error}</p>
@@ -129,7 +121,6 @@ function TrackContent() {
                 <div className="grid lg:grid-cols-3 gap-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
                     <div className="lg:col-span-2 space-y-6">
                         <div className="bg-zinc-900 rounded-3xl shadow-2xl shadow-zinc-950/50 border border-zinc-800 overflow-hidden">
-                            {/* Order Completed Banner */}
                             {booking.status === 'COMPLETED' && (
                                 <div className="mb-0 bg-green-900/10 border-b border-green-900/20 p-6 text-center animate-in fade-in zoom-in duration-500">
                                     <div className="w-12 h-12 bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-3 ring-1 ring-green-500/20">
@@ -171,7 +162,6 @@ function TrackContent() {
                                 />
                             </div>
 
-                            {/* Action Button for Client Confirmation */}
                             {booking.status === 'IN_PROGRESS' && (
                                 <div className="p-6 bg-orange-900/5 border-t border-orange-900/20">
                                     <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -195,7 +185,6 @@ function TrackContent() {
                             )}
                         </div>
 
-                        {/* ... Locations ... */}
                         <div className="grid md:grid-cols-2 gap-6">
                             <div className="bg-zinc-900 p-6 rounded-3xl border border-zinc-800 shadow-xl shadow-zinc-950/50 relative overflow-hidden group hover:border-orange-500/20 transition-colors">
                                 <div className="absolute top-0 right-0 w-24 h-24 bg-orange-500/5 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-150 duration-700" />
@@ -224,11 +213,9 @@ function TrackContent() {
                         </div>
                     </div>
 
-                    {/* ... Right Column (Details) ... */}
                     <div className="space-y-6">
                         <div className="bg-zinc-900 p-6 rounded-3xl border border-zinc-800 shadow-xl shadow-zinc-950/50">
                             <h3 className="font-bold text-lg mb-6 text-white border-b border-zinc-800 pb-4">Rincian Perjalanan</h3>
-                            {/* ... Content ... */}
                             <div className="space-y-8 relative before:absolute before:left-[15px] before:top-3 before:bottom-3 before:w-0.5 before:bg-zinc-800">
                                 <div className="flex gap-5 relative">
                                     <div className="w-8 h-8 rounded-full bg-zinc-900 flex items-center justify-center shrink-0 z-10 border-4 border-zinc-800 ring-1 ring-blue-500/50">

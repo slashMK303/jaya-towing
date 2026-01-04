@@ -55,7 +55,6 @@ async function main() {
         });
 
         if (!exists) {
-            // @ts-ignore - enum types mismatch in simple script sometimes
             await prisma.service.create({
                 data: {
                     ...s,

@@ -29,7 +29,6 @@ const slugify = (text: string) => {
 };
 
 export default function ServiceCard({ service, onSelect }: ServiceCardProps) {
-    // ... Icon logic ...
 
     return (
         <div className="group relative bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden hover:border-orange-500/50 transition-all duration-500 hover:shadow-2xl hover:shadow-orange-900/10 h-full flex flex-col">

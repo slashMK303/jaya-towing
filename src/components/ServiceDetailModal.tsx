@@ -32,7 +32,6 @@ export default function ServiceDetailModal({ isOpen, onClose, service }: Service
     if (!service) return null;
     if (!isOpen && !isVisible) return null;
 
-    // Helper to format price
     const formatRupiah = (amount: number) => {
         return new Intl.NumberFormat("id-ID", {
             style: "currency",
@@ -41,7 +40,6 @@ export default function ServiceDetailModal({ isOpen, onClose, service }: Service
         }).format(amount);
     };
 
-    // Dynamic Guide Items based on Service Type
     const getGuideItems = () => {
         const commonItems = [
             "Pastikan nomor telepon aktif (WA/Telp)",
@@ -59,7 +57,6 @@ export default function ServiceDetailModal({ isOpen, onClose, service }: Service
             ];
         }
 
-        // TRANSPORT / FLATBED
         return [
             ...commonItems,
             "Siapkan STNK kendaraan (Wajib)",

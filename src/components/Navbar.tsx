@@ -15,7 +15,7 @@ export default function Navbar({ settings = {} }: NavbarProps) {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const handleNavigation = (id: string) => {
-        setIsMobileMenuOpen(false); // Close menu on navigation
+        setIsMobileMenuOpen(false);
         if (pathname === "/") {
             const element = document.getElementById(id);
             if (element) {
@@ -33,7 +33,6 @@ export default function Navbar({ settings = {} }: NavbarProps) {
         <nav className="bg-zinc-950/90 backdrop-blur-md border-b border-zinc-800 sticky top-0 z-50 transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
-                    {/* Logo Area */}
                     <div
                         className="text-xl font-black tracking-tight cursor-pointer text-white flex items-center gap-2"
                         onClick={() => handleNavigation("hero")}

@@ -41,7 +41,6 @@ export default function LoginPage() {
             if (result?.error) {
                 setError("Invalid email or password");
             } else {
-                // Force hard redirect to ensure cookies/session are recognized by Middleware
                 window.location.href = "/dashboard";
             }
         } catch (error) {

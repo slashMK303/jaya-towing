@@ -48,7 +48,7 @@ export async function POST(req: Request) {
                 vehicleType: validatedData.vehicleType,
                 notes: validatedData.notes,
                 paymentMethod: validatedData.paymentMethod,
-                totalAmount: 0, // Placeholder, will set below
+                totalAmount: 0,
                 status: "PENDING",
                 serviceId: service.id,
                 trackingCode,
@@ -59,7 +59,6 @@ export async function POST(req: Request) {
             },
         });
 
-        // Calculate Real Price
         let finalPrice = Number(service.price);
 
         if (validatedData.pickupLat && validatedData.pickupLng && validatedData.dropLocationLat && validatedData.dropLocationLng) {
@@ -73,16 +72,13 @@ export async function POST(req: Request) {
                     const perKm = (service as any).pricePerKm ? Number((service as any).pricePerKm) : 0;
                     const addedCost = distKm * perKm;
                     finalPrice = finalPrice + addedCost;
-                    finalPrice = Math.ceil(finalPrice); // Round up
+                    finalPrice = Math.ceil(finalPrice);
                 }
             } catch (e) {
                 console.error("OSRM Error", e);
-                // Fallback to base price or user provided estimate if we want (risky)
-                // For now, keep base price if fail
             }
         }
 
-        // Update booking with correct price
         const updatedBooking = await prisma.booking.update({
             where: { id: booking.id },
             data: { totalAmount: finalPrice }
@@ -92,13 +88,11 @@ export async function POST(req: Request) {
             try {
                 const { createTransaction, snap } = await import("@/lib/midtrans");
 
-                // Construct Redirect URL
-                // We want to redirect to the Track Page
                 const finishUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/track?code=${trackingCode}`;
 
                 const parameter = {
                     transaction_details: {
-                        order_id: updatedBooking.id, // Use ID or Tracking Code? ID is standard
+                        order_id: updatedBooking.id,
                         gross_amount: finalPrice,
                     },
                     customer_details: {

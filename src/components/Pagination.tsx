@@ -62,8 +62,6 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
 
                         {/* Simple Page Indicator */}
                         {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                            // Logic to show pages around current page could be complex, simplicity for now
-                            // Show current page always, and some neighbors
 
                             let pageNum = currentPage;
                             if (totalPages <= 5) pageNum = i + 1;

@@ -2,22 +2,13 @@ import 'dotenv/config'
 import prisma from '../src/lib/prisma'
 import bcrypt from 'bcrypt'
 
-// const prisma = new PrismaClient({
-//     datasources: {
-//         db: {
-//             url: process.env.DATABASE_URL,
-//         },
-//     },
-// })
-
 async function main() {
     const password = await bcrypt.hash('admin123', 10)
-    // const password = '$2b$10$yourhashedpasswordhere' // Placeholder for now
 
     const admin = await prisma.user.upsert({
         where: { email: 'admin@towing.com' },
         update: {
-            password, // Update password if user exists
+            password,
         },
         create: {
             email: 'admin@towing.com',
@@ -56,17 +47,16 @@ async function main() {
                 isActive: true,
             },
         ],
-        skipDuplicates: true, // Prevents errors if services already exist
+        skipDuplicates: true,
     })
 
     console.log({ services })
 
-    // Seed Settings
     const settingsData = [
         { key: 'site_title', value: 'NMK Towing - Jasa Derek Profesional' },
         { key: 'site_description', value: 'Layanan towing dan derek mobil 24 jam terpercaya, cepat, dan aman.' },
         { key: 'business_name', value: 'NMK Towing' },
-        { key: 'logo_url', value: '' }, // Empty defaults to text
+        { key: 'logo_url', value: '' },
         { key: 'contact_phone', value: '08123456789' },
         { key: 'hero_title', value: 'Towing & Derek Mobil 24 Jam' },
         { key: 'hero_description', value: 'Siap membantu Anda kapan saja dan di mana saja. Layanan profesional dengan armada terawat dan driver berpengalaman.' },

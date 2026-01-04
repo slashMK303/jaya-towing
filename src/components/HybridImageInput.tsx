@@ -16,7 +16,6 @@ export default function HybridImageInput({ name, defaultValue, label = "Gambar" 
     const [urlInput, setUrlInput] = useState<string>(defaultValue || "");
     const [isUploading, setIsUploading] = useState(false);
 
-    // Hidden input to store the final value (URL or Path)
     const [finalValue, setFinalValue] = useState<string>(defaultValue || "");
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -24,7 +23,6 @@ export default function HybridImageInput({ name, defaultValue, label = "Gambar" 
         const file = e.target.files?.[0];
         if (!file) return;
 
-        // Visual preview immediately
         const objectUrl = URL.createObjectURL(file);
         setPreview(objectUrl);
         setIsUploading(true);
@@ -43,7 +41,7 @@ export default function HybridImageInput({ name, defaultValue, label = "Gambar" 
                 setFinalValue(data.url);
             } else {
                 alert("Upload failed: " + data.error);
-                setPreview(defaultValue || null); // Revert
+                setPreview(defaultValue || null);
             }
         } catch (err) {
             console.error(err);
@@ -57,7 +55,6 @@ export default function HybridImageInput({ name, defaultValue, label = "Gambar" 
         const val = e.target.value;
         setUrlInput(val);
         setFinalValue(val);
-        // Only set preview if it looks like a URL to avoid broken images
         if (val.match(/^https?:\/\/.+/)) {
             setPreview(val);
         } else {
@@ -69,10 +66,8 @@ export default function HybridImageInput({ name, defaultValue, label = "Gambar" 
         <div className="space-y-4">
             <label className="block text-xs font-bold uppercase tracking-wider text-zinc-500">{label}</label>
 
-            {/* The actual input that gets submitted in the form */}
             <input type="hidden" name={name} value={finalValue} />
 
-            {/* Preview Area */}
             {preview ? (
                 <div className="relative w-full h-48 bg-zinc-950 rounded-xl overflow-hidden border border-zinc-800 group">
                     <Image

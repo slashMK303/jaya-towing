@@ -21,8 +21,6 @@ export default function ServiceGrid({ services }: ServiceGridProps) {
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
-        // Delay clearing service to allow animation to finish if needed, 
-        // but for now immediate close is fine, the modal has internal checks.
         setTimeout(() => setSelectedService(null), 300);
     };
 
@@ -36,7 +34,6 @@ export default function ServiceGrid({ services }: ServiceGridProps) {
                             ...service,
                             price: Number(service.price),
                             slug: service.slug,
-                            // Ensure properties exist even if types are loose
                             type: (service as any).type,
                             fleetType: (service as any).fleetType
                         } as any}

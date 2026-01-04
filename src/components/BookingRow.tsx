@@ -8,7 +8,6 @@ import { Loader2, LocateFixed, ChevronDown, Copy, Check } from "lucide-react";
 import { useState, useTransition } from "react";
 import dynamic from "next/dynamic";
 
-// Dynamic import for the Map Modal
 const DriverLocationModal = dynamic(() => import("./DriverLocationModal"), { ssr: false });
 
 interface SerializedService extends Omit<Service, "price" | "pricePerKm"> {
@@ -38,7 +37,7 @@ export default function BookingRow({ booking }: BookingRowProps) {
             const result = await updateBookingStatus(booking.id, newStatus);
             if (!result.success) {
                 alert("Gagal update status");
-                setStatus(booking.status); // Revert
+                setStatus(booking.status);
             }
         });
     };

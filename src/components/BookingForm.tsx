@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { MapPin, X, Check } from "lucide-react";
 
-// Dynamically import MapPicker to avoid SSR issues with Leaflet
 const MapPicker = dynamic(() => import("./MapPicker"), {
     ssr: false,
     loading: () => <div className="h-[400px] w-full bg-gray-100 dark:bg-gray-700 animate-pulse rounded-lg flex items-center justify-center">Memuat Peta...</div>
@@ -60,12 +59,11 @@ export default function BookingForm({
         dropLocationLat?: number;
         dropLocationLng?: number;
     }>({});
-    const [distance, setDistance] = useState<number>(0); // in KM
+    const [distance, setDistance] = useState<number>(0); 
     const [estimatedPrice, setEstimatedPrice] = useState<number>(basePrice);
     const [successData, setSuccessData] = useState<{ id: string; trackingCode: string } | null>(null);
     const [isRedirecting, setIsRedirecting] = useState(false);
 
-    // Dynamic Schema based on Service Type
     const currentSchema = z.object({
         customerName: z.string().min(3, "Nama harus diisi minimal 3 karakter"),
         customerPhone: z
@@ -73,7 +71,7 @@ export default function BookingForm({
             .min(10, "Nomor telepon tidak valid")
             .regex(/^\d+$/, "Hanya angka yang diperbolehkan"),
         pickupLocation: z.string().min(5, "Lokasi penjemputan harus jelas"),
-        // Drop location is optional for ON_SITE
+        
         dropLocation: serviceType === "ON_SITE"
             ? z.string().optional()
             : z.string().min(5, "Tujuan pengantaran harus jelas"),
@@ -97,7 +95,6 @@ export default function BookingForm({
 
     const paymentMethod = watch("paymentMethod");
 
-    // Calculate Price when coords change (Only for TRANSPORT)
     useEffect(() => {
         const calculateRoute = async () => {
             if (serviceType === "ON_SITE") {
@@ -118,9 +115,8 @@ export default function BookingForm({
                         const distKm = distMeters / 1000;
                         setDistance(distKm);
 
-                        // Calculation: Base + (Km * PricePerKm)
                         const total = basePrice + (distKm * pricePerKm);
-                        setEstimatedPrice(Math.ceil(total)); // Round up
+                        setEstimatedPrice(Math.ceil(total));
                     }
                 } catch (err) {
                     console.error("Failed to calc distance", err);
@@ -134,7 +130,6 @@ export default function BookingForm({
         calculateRoute();
     }, [coords, basePrice, pricePerKm, serviceType]);
 
-    // Load Midtrans Snap Script
     useEffect(() => {
         const snapScript = "https://app.sandbox.midtrans.com/snap/snap.js";
         const clientKey = process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY || "";
@@ -164,7 +159,6 @@ export default function BookingForm({
                 estimatedPrice: estimatedPrice
             };
 
-            // For ON_SITE, ensure dropLocation is handled (e.g. same as pickup or empty)
             if (serviceType === "ON_SITE") {
                 (payload as any).dropLocation = "ON-SITE (Sama dengan Penjemputan)";
             }
@@ -188,20 +182,17 @@ export default function BookingForm({
                     onSuccess: function (midtransResult: any) {
                         setSuccessData({ id: result.id, trackingCode: result.trackingCode });
                         setIsRedirecting(true);
-                        // Auto redirect to tracking page
                         router.push(`/track?code=${result.trackingCode}`);
                     },
                     onPending: function (midtransResult: any) {
                         setSuccessData({ id: result.id, trackingCode: result.trackingCode });
                         setIsRedirecting(true);
-                        // Auto redirect to tracking page for pending payments (e.g. VA)
                         router.push(`/track?code=${result.trackingCode}`);
                     },
                     onError: function (midtransResult: any) {
                         setError("Pembayaran Gagal! Silakan coba lagi atau pilih COD.");
                     },
                     onClose: function () {
-                        // Optional: Handle if user closes without finishing (though success/pending usually fire first if done)
                         if (!successData) {
                             setError("Pembayaran dibatalkan atau belum selesai.");
                         }
@@ -228,7 +219,6 @@ export default function BookingForm({
         setShowMap(null);
     };
 
-    // Render form
     return (
         <div className="bg-zinc-900 p-8 rounded-3xl shadow-2xl relative border border-zinc-800">
             <div className="mb-6 p-6 bg-zinc-950 rounded-2xl border border-zinc-800 shadow-inner">

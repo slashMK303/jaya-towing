@@ -6,12 +6,10 @@ import { useState, useRef, useEffect } from "react";
 import { MessageCircle, X, Send, Bot, User, Loader2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
-// Helper to extract text content from message parts (AI SDK v6)
 function getMessageContent(message: {
     parts?: Array<{ type: string; text?: string }>;
     content?: string | Array<{ type: string; text?: string }>;
 }): string {
-    // AI SDK v6 uses parts - only show "text" type (not "reasoning")
     if (message.parts && Array.isArray(message.parts)) {
         const text = message.parts
             .filter((part) => part.type === "text" && part.text)
@@ -20,7 +18,6 @@ function getMessageContent(message: {
         return text;
     }
 
-    // Handle content as array (some SDK versions)
     if (Array.isArray(message.content)) {
         const text = message.content
             .filter((part) => part.type === "text" && part.text)
@@ -29,7 +26,6 @@ function getMessageContent(message: {
         return text;
     }
 
-    // Fallback to content as string
     if (typeof message.content === "string") {
         return message.content;
     }
@@ -55,7 +51,6 @@ export default function ChatBot() {
 
     const isLoading = status === "submitted" || status === "streaming";
 
-    // Fetch business settings when component mounts
     useEffect(() => {
         async function fetchSettings() {
             try {
@@ -73,7 +68,6 @@ export default function ChatBot() {
         fetchSettings();
     }, []);
 
-    // Auto-scroll to bottom when new messages arrive
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);

@@ -10,9 +10,9 @@ function slugify(text: string) {
         .toString()
         .toLowerCase()
         .trim()
-        .replace(/\s+/g, "-") // Replace spaces with -
-        .replace(/[^\w\-]+/g, "") // Remove all non-word chars
-        .replace(/\-\-+/g, "-"); // Replace multiple - with single -
+        .replace(/\s+/g, "-")
+        .replace(/[^\w\-]+/g, "")
+        .replace(/\-\-+/g, "-");
 }
 
 const serviceSchema = z.object({
@@ -29,7 +29,6 @@ const serviceSchema = z.object({
 export async function createService(formData: FormData) {
     const data = Object.fromEntries(formData.entries());
 
-    // Convert isActive checkbox "on" to boolean true, or false if missing
     const parsedData = {
         ...data,
         isActive: data.isActive === "on",

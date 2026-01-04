@@ -9,51 +9,36 @@ export default function BookingFilters() {
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    // Local state for inputs
     const [search, setSearch] = useState(searchParams.get("q") || "");
     const [status, setStatus] = useState(searchParams.get("status") || "ALL");
     const [dateRange, setDateRange] = useState(searchParams.get("date") || "ALL");
 
-    // Debounce search input to avoid too many refreshes
     const [debouncedSearch] = useDebounce(search, 500);
 
-    // Helper to generate URL
     const updateURL = useCallback((params: { q?: string; status?: string; date?: string }) => {
         const newSearchParams = new URLSearchParams(searchParams.toString());
-
-        // Handle Search
         if (params.q !== undefined) {
             if (params.q) newSearchParams.set("q", params.q);
             else newSearchParams.delete("q");
         }
-
-        // Handle Status
         if (params.status !== undefined) {
             if (params.status && params.status !== "ALL") newSearchParams.set("status", params.status);
             else newSearchParams.delete("status");
         }
-
-        // Handle Date
         if (params.date !== undefined) {
             if (params.date && params.date !== "ALL") newSearchParams.set("date", params.date);
             else newSearchParams.delete("date");
         }
-
-        // Reset page on filter change
         newSearchParams.set("page", "1");
-
         router.push(`?${newSearchParams.toString()}`);
     }, [searchParams, router]);
 
-
-    // Effect ONLY for Debounced Search
     useEffect(() => {
-        // Only trigger if local state differs from URL to prevent loop
         const currentQ = searchParams.get("q") || "";
         if (debouncedSearch !== currentQ) {
             updateURL({ q: debouncedSearch });
         }
-    }, [debouncedSearch, updateURL, searchParams]); // searchParams dependency is safe here with the check
+    }, [debouncedSearch, updateURL, searchParams]);
 
     const handleStatusChange = (val: string) => {
         setStatus(val);

@@ -7,7 +7,7 @@ import { useState } from "react";
 type SafeService = Omit<Service, "price" | "pricePerKm"> & { price: number; pricePerKm: number };
 
 interface ServiceFormProps {
-    service?: SafeService; // Optional for create mode
+    service?: SafeService;
     action: (formData: FormData) => Promise<any>;
 }
 
@@ -31,7 +31,6 @@ function SubmitButton({ isEdit }: { isEdit: boolean }) {
 export default function ServiceForm({ service, action }: ServiceFormProps) {
     const [error, setError] = useState<string | null>(null);
 
-    // Initial values for controlled inputs
     const [priceDisplay, setPriceDisplay] = useState(
         service ? Number(service.price).toLocaleString("id-ID") : ""
     );
@@ -42,7 +41,6 @@ export default function ServiceForm({ service, action }: ServiceFormProps) {
     async function clientAction(formData: FormData) {
         const result = await action(formData);
         if (result?.error) {
-            // Handle object errors (field validation) or string error
             if (typeof result.error === 'string') {
                 setError(result.error);
             } else {

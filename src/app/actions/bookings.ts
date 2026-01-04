@@ -35,7 +35,7 @@ export async function updateDriverLocation(
             },
         });
         revalidatePath("/dashboard/bookings");
-        revalidatePath(`/track`); // Revalidate track page if using ISR, though it's dynamic
+        revalidatePath(`/track`);
         return { success: true };
     } catch (error) {
         console.error("Failed to update driver location:", error);
