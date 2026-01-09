@@ -65,27 +65,29 @@ export default function ServiceDetailModal({ isOpen, onClose, service }: Service
         ];
     };
 
-    return (
+    if (!isVisible) return null;
+
+    const modalContent = (
         <div
-            className={`fixed inset-0 z-[100] flex items-center justify-center p-4 transition-all duration-300 ${isOpen ? "bg-black/80 backdrop-blur-sm" : "bg-black/0 backdrop-blur-none pointer-events-none"
+            className={`fixed inset-0 z-[9999] flex items-center justify-center p-4 transition-all duration-300 ${isOpen ? "bg-black/80 backdrop-blur-sm" : "bg-black/0 backdrop-blur-none pointer-events-none"
                 }`}
             onClick={onClose}
         >
             <div
-                className={`bg-zinc-900 w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl border border-zinc-800 relative transition-all duration-300 transform ${isOpen ? "scale-100 opacity-100 translate-y-0" : "scale-95 opacity-0 translate-y-4"
+                className={`bg-zinc-900 w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl border border-zinc-800 relative transition-all duration-300 transform flex flex-col max-h-[90vh] ${isOpen ? "scale-100 opacity-100 translate-y-0" : "scale-95 opacity-0 translate-y-4"
                     }`}
                 onClick={(e) => e.stopPropagation()}
             >
-                {/* Close Button */}
+                {/* Close Button - increased z-index and top position safety */}
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 z-10 w-10 h-10 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-white backdrop-blur-md transition-colors"
+                    className="absolute top-4 right-4 z-[60] w-10 h-10 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-white backdrop-blur-md transition-colors"
                 >
                     <X className="w-5 h-5" />
                 </button>
 
                 {/* Hero Image */}
-                <div className="relative h-64 w-full">
+                <div className="relative h-64 w-full shrink-0">
                     <Image
                         src={service.image || "https://images.unsplash.com/photo-1632823471465-4889a0bdb319?q=80&w=2629&auto=format&fit=crop"}
                         alt={service.title}
@@ -118,7 +120,7 @@ export default function ServiceDetailModal({ isOpen, onClose, service }: Service
                     </div>
                 </div>
 
-                <div className="p-6 md:p-8">
+                <div className="p-6 md:p-8 overflow-y-auto custom-scrollbar">
                     {/* Price Section */}
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 p-4 bg-zinc-950/50 rounded-2xl border border-zinc-800">
                         <div>
@@ -176,4 +178,10 @@ export default function ServiceDetailModal({ isOpen, onClose, service }: Service
             </div>
         </div>
     );
+
+    if (typeof document !== "undefined") {
+        const { createPortal } = require("react-dom");
+        return createPortal(modalContent, document.body);
+    }
+    return null;
 }
